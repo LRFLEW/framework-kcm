@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>Framework KCM</vendor>
+
+  <action id="io.github.frameworkkcm.battery">
+    <description>Change battery charging settings</description>
+    <description xml:lang="de">Akku-Ladeeinstellungen ändern</description>
+    <description xml:lang="es">Cambiar las opciones de carga de la batería</description>
+    <description xml:lang="fr">Modifier les paramètres de charge de la batterie</description>
+    <description xml:lang="nl">Instellingen voor het opladen van de accu wijzigen</description>
+    <message>Authentication is required to change battery charging settings</message>
+    <message xml:lang="de">Zum Ändern der Akku-Ladeeinstellungen ist eine Authentifizierung erforderlich</message>
+    <message xml:lang="es">Se requiere autenticación para cambiar las opciones de carga de la batería</message>
+    <message xml:lang="fr">Une authentification est requise pour modifier les paramètres de charge de la batterie</message>
+    <message xml:lang="nl">Authenticatie is vereist om de instellingen voor het opladen van de accu te wijzigen</message>
+    <icon_name>battery</icon_name>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="io.github.frameworkkcm.fan">
+    <description>Control fan speed</description>
+    <description xml:lang="de">Lüfterdrehzahl steuern</description>
+    <description xml:lang="es">Controlar la velocidad del ventilador</description>
+    <description xml:lang="fr">Contrôler la vitesse des ventilateurs</description>
+    <description xml:lang="nl">Ventilatorsnelheid regelen</description>
+    <message>Authentication is required to control the fan speed</message>
+    <message xml:lang="de">Zum Steuern der Lüfterdrehzahl ist eine Authentifizierung erforderlich</message>
+    <message xml:lang="es">Se requiere autenticación para controlar la velocidad del ventilador</message>
+    <message xml:lang="fr">Une authentification est requise pour contrôler la vitesse des ventilateurs</message>
+    <message xml:lang="nl">Authenticatie is vereist om de ventilatorsnelheid te regelen</message>
+    <icon_name>temperature-normal</icon_name>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+
+  <action id="io.github.frameworkkcm.input">
+    <description>Change touchpad and LED settings</description>
+    <description xml:lang="de">Touchpad- und LED-Einstellungen ändern</description>
+    <description xml:lang="es">Cambiar las opciones del panel táctil y del LED</description>
+    <description xml:lang="fr">Modifier les paramètres du pavé tactile et du voyant</description>
+    <description xml:lang="nl">Instellingen voor touchpad en led wijzigen</description>
+    <message>Authentication is required to change touchpad and LED settings</message>
+    <message xml:lang="de">Zum Ändern der Touchpad- und LED-Einstellungen ist eine Authentifizierung erforderlich</message>
+    <message xml:lang="es">Se requiere autenticación para cambiar las opciones del panel táctil y del LED</message>
+    <message xml:lang="fr">Une authentification est requise pour modifier les paramètres du pavé tactile et du voyant</message>
+    <message xml:lang="nl">Authenticatie is vereist om de instellingen voor touchpad en led te wijzigen</message>
+    <icon_name>input-touchpad</icon_name>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+</policyconfig>

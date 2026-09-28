@@ -1,0 +1,24 @@
+[Unit]
+Description=Framework Laptop hardware control service
+Documentation=https://github.com/FrameworkComputer/framework-system
+
+[Service]
+Type=dbus
+BusName=io.github.frameworkkcm.Daemon1
+ExecStart=@DAEMON_PATH@
+StateDirectory=framework-kcmd
+
+# Needs raw access to /dev/cros_ec, the EC I/O ports, hidraw and SMBIOS,
+# so keep hardening to what doesn't get in the way of that.
+ProtectHome=yes
+ProtectSystem=strict
+PrivateTmp=yes
+NoNewPrivileges=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+LockPersonality=yes
+
+[Install]
+# Started at boot so write-only settings (touchpad haptics, charge rate)
+# get re-applied; otherwise D-Bus activation starts it on demand.
+WantedBy=multi-user.target

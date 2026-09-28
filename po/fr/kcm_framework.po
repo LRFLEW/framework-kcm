@@ -1,0 +1,652 @@
+# French translation of framework-kcm
+# Machine translated; please review.
+# This file is distributed under the same license as the framework-kcm package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: framework-kcm\n"
+"Report-Msgid-Bugs-To: github-viral8565@pxdmail.com\n"
+"POT-Creation-Date: 2026-09-29 00:46+0100\n"
+"PO-Revision-Date: 2026-09-28 23:38+0000\n"
+"Last-Translator: Machine translation (Claude), needs review\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: kcm/frameworkkcm.cpp:390
+#, kde-format
+msgid "You are not authorized to change this setting."
+msgstr "Vous n'êtes pas autorisé à modifier ce paramètre."
+
+#: kcm/frameworkkcm.cpp:392
+#, kde-format
+msgid "The Framework hardware service is not running."
+msgstr "Le service matériel Framework n'est pas en cours d'exécution."
+
+#: kcm/ui/BatteryPage.qml:12
+#, kde-format
+msgid "Charging"
+msgstr "Charge"
+
+#: kcm/ui/BatteryPage.qml:16
+#, kde-format
+msgid "Charge limit:"
+msgstr "Limite de charge :"
+
+#: kcm/ui/BatteryPage.qml:29 kcm/ui/BatteryPage.qml:106 kcm/ui/InputPage.qml:38
+#: kcm/ui/InputPage.qml:39 kcm/ui/InputPage.qml:40 kcm/ui/InputPage.qml:41
+#: kcm/ui/ThermalPage.qml:146
+#, kde-format
+msgctxt "percent"
+msgid "%1%"
+msgstr "%1 %"
+
+#: kcm/ui/BatteryPage.qml:34
+#, kde-format
+msgid ""
+"Stops charging at this level. Keeping the battery below 100% helps it age "
+"slower. Plasma's Power Management page can set the same limit through the "
+"kernel driver; use only one of them."
+msgstr ""
+"Arrête la charge à ce niveau. Maintenir la batterie sous 100 % ralentit son "
+"vieillissement. La page Gestion de l'énergie de Plasma peut définir la même "
+"limite via le pilote du noyau ; n'utilisez que l'une des deux."
+
+#: kcm/ui/BatteryPage.qml:41
+#, kde-format
+msgid "Override Charge Limit"
+msgstr "Ignorer la limite de charge"
+
+#: kcm/ui/BatteryPage.qml:44
+#, kde-format
+msgid ""
+"Charge to 100% once. The limit goes back to %1% the next time the computer "
+"starts."
+msgstr ""
+"Charger à 100 % une seule fois. La limite revient à %1 % au prochain "
+"démarrage de l'ordinateur."
+
+#: kcm/ui/BatteryPage.qml:52
+#, kde-format
+msgid ""
+"Charging to 100% until the computer restarts. The limit then goes back to "
+"%1%."
+msgstr ""
+"Charge à 100 % jusqu'au redémarrage de l'ordinateur. La limite revient "
+"ensuite à %1 %."
+
+#: kcm/ui/BatteryPage.qml:55
+#, kde-format
+msgid "Restore Now"
+msgstr "Rétablir maintenant"
+
+#: kcm/ui/BatteryPage.qml:62
+#, kde-format
+msgid "Charge speed:"
+msgstr "Vitesse de charge :"
+
+#: kcm/ui/BatteryPage.qml:63
+#, kde-format
+msgid "Limit charging speed"
+msgstr "Limiter la vitesse de charge"
+
+#: kcm/ui/BatteryPage.qml:85
+#, kde-format
+msgctxt "charge speed multiplier, hours to charge from empty"
+msgid "%1× (about %2 h from empty)"
+msgstr "%1× (environ %2 h de vide à pleine)"
+
+#: kcm/ui/BatteryPage.qml:95
+#, kde-format
+msgid "Only above battery level:"
+msgstr "Uniquement au-dessus du niveau de batterie :"
+
+#: kcm/ui/BatteryPage.qml:112
+#, kde-format
+msgid ""
+"Relative to full charging speed. Slower charging produces less heat and "
+"wears the battery less; times are approximate. The EC forgets this limit on "
+"reset, so the service re-applies it when it starts."
+msgstr ""
+"Par rapport à la vitesse de charge maximale. Une charge plus lente produit "
+"moins de chaleur et use moins la batterie ; les durées sont approximatives. "
+"L'EC oublie cette limite lors d'une réinitialisation, le service la "
+"réapplique donc à son démarrage."
+
+#: kcm/ui/InputPage.qml:10
+#, kde-format
+msgid "Lighting"
+msgstr "Éclairage"
+
+#: kcm/ui/InputPage.qml:14
+#, kde-format
+msgid "Fingerprint reader LED:"
+msgstr "Voyant du lecteur d'empreintes :"
+
+#: kcm/ui/InputPage.qml:17
+#, kde-format
+msgid "Custom"
+msgstr "Personnalisé"
+
+#: kcm/ui/InputPage.qml:17 kcm/ui/SystemPage.qml:13 kcm/ui/SystemPage.qml:97
+#: kcm/ui/SystemPage.qml:102 kcm/ui/SystemPage.qml:142
+#, kde-format
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: kcm/ui/InputPage.qml:19 kcm/ui/ThermalPage.qml:127
+#, kde-format
+msgid "Automatic"
+msgstr "Automatique"
+
+#: kcm/ui/InputPage.qml:20
+#, kde-format
+msgctxt "fingerprint LED brightness"
+msgid "High"
+msgstr "Élevée"
+
+#: kcm/ui/InputPage.qml:21
+#, kde-format
+msgctxt "fingerprint LED brightness"
+msgid "Medium"
+msgstr "Moyenne"
+
+#: kcm/ui/InputPage.qml:22
+#, kde-format
+msgctxt "fingerprint LED brightness"
+msgid "Low"
+msgstr "Faible"
+
+#: kcm/ui/InputPage.qml:23
+#, kde-format
+msgctxt "fingerprint LED brightness"
+msgid "Ultra low"
+msgstr "Très faible"
+
+#: kcm/ui/InputPage.qml:29
+#, kde-format
+msgid "Haptic Touchpad"
+msgstr "Pavé tactile haptique"
+
+#: kcm/ui/InputPage.qml:33
+#, kde-format
+msgid "Haptic feedback:"
+msgstr "Retour haptique :"
+
+#: kcm/ui/InputPage.qml:35 kcm/ui/InputPage.qml:48
+#, kde-format
+msgid "Not set"
+msgstr "Non défini"
+
+#: kcm/ui/InputPage.qml:37
+#, kde-format
+msgid "Off"
+msgstr "Désactivé"
+
+#: kcm/ui/InputPage.qml:46
+#, kde-format
+msgid "Click force:"
+msgstr "Force du clic :"
+
+#: kcm/ui/InputPage.qml:50
+#, kde-format
+msgctxt "touchpad click force"
+msgid "Light"
+msgstr "Légère"
+
+#: kcm/ui/InputPage.qml:51
+#, kde-format
+msgctxt "touchpad click force"
+msgid "Medium"
+msgstr "Moyenne"
+
+#: kcm/ui/InputPage.qml:52
+#, kde-format
+msgctxt "touchpad click force"
+msgid "Firm"
+msgstr "Ferme"
+
+#: kcm/ui/InputPage.qml:57
+#, kde-format
+msgid ""
+"Only for haptic touchpads. The touchpad can't report these settings back, so "
+"this shows what was last set here. The service re-applies them when it "
+"starts."
+msgstr ""
+"Uniquement pour les pavés tactiles haptiques. Le pavé tactile ne peut pas "
+"renvoyer ces paramètres : ceci affiche la dernière valeur définie ici. Le "
+"service les réapplique à son démarrage."
+
+#: kcm/ui/main.qml:21
+#, kde-format
+msgid ""
+"Could not reach the Framework hardware service (framework-kcmd). Make sure "
+"it is installed and that D-Bus activation or the systemd unit is enabled."
+msgstr ""
+"Impossible de joindre le service matériel Framework (framework-kcmd). "
+"Vérifiez qu'il est installé et que l'activation D-Bus ou l'unité systemd est "
+"activée."
+
+#: kcm/ui/main.qml:38
+#, kde-format
+msgid "Battery"
+msgstr "Batterie"
+
+#: kcm/ui/main.qml:39
+#, kde-format
+msgid "Fans & Thermals"
+msgstr "Ventilateurs et températures"
+
+#: kcm/ui/main.qml:40
+#, kde-format
+msgid "Touchpad & LED"
+msgstr "Pavé tactile et voyant"
+
+#: kcm/ui/main.qml:41
+#, kde-format
+msgid "System"
+msgstr "Système"
+
+#: kcm/ui/SystemPage.qml:18
+#, kde-format
+msgctxt "USB-C port location"
+msgid "Right back"
+msgstr "Arrière droit"
+
+#: kcm/ui/SystemPage.qml:19
+#, kde-format
+msgctxt "USB-C port location"
+msgid "Right front"
+msgstr "Avant droit"
+
+#: kcm/ui/SystemPage.qml:20
+#, kde-format
+msgctxt "USB-C port location"
+msgid "Right middle"
+msgstr "Milieu droit"
+
+#: kcm/ui/SystemPage.qml:21
+#, kde-format
+msgctxt "USB-C port location"
+msgid "Left front"
+msgstr "Avant gauche"
+
+#: kcm/ui/SystemPage.qml:22
+#, kde-format
+msgctxt "USB-C port location"
+msgid "Left middle"
+msgstr "Milieu gauche"
+
+#: kcm/ui/SystemPage.qml:23
+#, kde-format
+msgctxt "USB-C port location"
+msgid "Left back"
+msgstr "Arrière gauche"
+
+#: kcm/ui/SystemPage.qml:30
+#, kde-format
+msgctxt "charger type"
+msgid "USB Power Delivery"
+msgstr "USB Power Delivery"
+
+#: kcm/ui/SystemPage.qml:31
+#, kde-format
+msgctxt "charger type"
+msgid "USB-C"
+msgstr "USB-C"
+
+#: kcm/ui/SystemPage.qml:32
+#, kde-format
+msgctxt "charger type"
+msgid "a proprietary charger"
+msgstr "un chargeur propriétaire"
+
+#: kcm/ui/SystemPage.qml:33
+#, kde-format
+msgctxt "charger type"
+msgid "USB battery charging"
+msgstr "USB Battery Charging"
+
+#: kcm/ui/SystemPage.qml:34
+#, kde-format
+msgctxt "charger type"
+msgid "USB bus power"
+msgstr "l'alimentation par bus USB"
+
+#: kcm/ui/SystemPage.qml:35
+#, kde-format
+msgctxt "charger type"
+msgid "an unknown charger"
+msgstr "un chargeur inconnu"
+
+#: kcm/ui/SystemPage.qml:41
+#, kde-format
+msgctxt "PD controller firmware version"
+msgid "Right: %1"
+msgstr "Droit : %1"
+
+#: kcm/ui/SystemPage.qml:42
+#, kde-format
+msgctxt "PD controller firmware version"
+msgid "Left: %1"
+msgstr "Gauche : %1"
+
+#: kcm/ui/SystemPage.qml:44
+#, kde-format
+msgctxt "PD controller number, firmware version"
+msgid "PD %1: %2"
+msgstr "PD %1 : %2"
+
+#: kcm/ui/SystemPage.qml:50
+#, kde-format
+msgid "Device"
+msgstr "Appareil"
+
+#: kcm/ui/SystemPage.qml:54
+#, kde-format
+msgid "Model:"
+msgstr "Modèle :"
+
+#: kcm/ui/SystemPage.qml:62
+#, kde-format
+msgid ""
+"This does not look like a Framework laptop. Most settings will not work."
+msgstr ""
+"Cet ordinateur ne semble pas être un portable Framework. La plupart des "
+"paramètres ne fonctionneront pas."
+
+#: kcm/ui/SystemPage.qml:66
+#, kde-format
+msgid "Camera:"
+msgstr "Caméra :"
+
+#: kcm/ui/SystemPage.qml:68 kcm/ui/SystemPage.qml:74
+#, kde-format
+msgid "Enabled"
+msgstr "Activé"
+
+#: kcm/ui/SystemPage.qml:68 kcm/ui/SystemPage.qml:74
+#, kde-format
+msgid "Disabled by privacy switch"
+msgstr "Désactivé par le commutateur de confidentialité"
+
+#: kcm/ui/SystemPage.qml:72
+#, kde-format
+msgid "Microphone:"
+msgstr "Microphone :"
+
+#: kcm/ui/SystemPage.qml:79
+#, kde-format
+msgid "Firmware"
+msgstr "Micrologiciel"
+
+#: kcm/ui/SystemPage.qml:83
+#, kde-format
+msgid "BIOS:"
+msgstr "BIOS :"
+
+#: kcm/ui/SystemPage.qml:84
+#, kde-format
+msgctxt "version (date)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: kcm/ui/SystemPage.qml:88
+#, kde-format
+msgid "EC:"
+msgstr "EC :"
+
+#: kcm/ui/SystemPage.qml:93
+#, kde-format
+msgid "EC image:"
+msgstr "Image de l'EC :"
+
+#: kcm/ui/SystemPage.qml:96
+#, kde-format
+msgctxt "EC firmware images; RO and RW are the read-only and read-write copies"
+msgid "RO %1, RW %2 (running %3)"
+msgstr "RO %1, RW %2 (actif : %3)"
+
+#: kcm/ui/SystemPage.qml:101
+#, kde-format
+msgid "PD controllers:"
+msgstr "Contrôleurs PD :"
+
+#: kcm/ui/SystemPage.qml:106
+#, kde-format
+msgid "Service:"
+msgstr "Service :"
+
+#: kcm/ui/SystemPage.qml:108
+#, kde-format
+msgid "framework-kcmd %1"
+msgstr "framework-kcmd %1"
+
+#: kcm/ui/SystemPage.qml:113
+#, kde-format
+msgid "USB-C Ports"
+msgstr "Ports USB-C"
+
+#: kcm/ui/SystemPage.qml:123
+#, kde-format
+msgctxt "port name"
+msgid "%1:"
+msgstr "%1 :"
+
+#: kcm/ui/SystemPage.qml:127
+#, kde-format
+msgid "Unavailable"
+msgstr "Indisponible"
+
+#: kcm/ui/SystemPage.qml:131
+#, kde-format
+msgid "Nothing connected"
+msgstr "Rien de connecté"
+
+#: kcm/ui/SystemPage.qml:133
+#, kde-format
+msgid "Powering a device"
+msgstr "Alimente un appareil"
+
+#: kcm/ui/SystemPage.qml:138
+#, kde-format
+msgctxt "USB-C port state"
+msgid "Charging"
+msgstr "En charge"
+
+#: kcm/ui/SystemPage.qml:138
+#, kde-format
+msgctxt "USB-C port state"
+msgid "Connected, not charging"
+msgstr "Connecté, pas en charge"
+
+#: kcm/ui/SystemPage.qml:139
+#, kde-format
+msgctxt "state, charger type, watts, volts"
+msgid "%1 via %2, up to %3 W (%4 V)"
+msgstr "%1 via %2, jusqu’à %3 W (%4 V)"
+
+#: kcm/ui/ThermalPage.qml:14
+#, kde-format
+msgctxt "temperature sensor"
+msgid "CPU"
+msgstr "Processeur"
+
+#: kcm/ui/ThermalPage.qml:15
+#, kde-format
+msgctxt "temperature sensor on the mainboard next to the CPU"
+msgid "Near CPU"
+msgstr "Près du processeur"
+
+#: kcm/ui/ThermalPage.qml:16
+#, kde-format
+msgctxt "temperature sensor"
+msgid "Memory"
+msgstr "Mémoire"
+
+#: kcm/ui/ThermalPage.qml:17
+#, kde-format
+msgctxt "temperature sensor"
+msgid "Mainboard"
+msgstr "Carte mère"
+
+#: kcm/ui/ThermalPage.qml:18
+#, kde-format
+msgctxt "temperature sensor"
+msgid "Battery"
+msgstr "Batterie"
+
+#: kcm/ui/ThermalPage.qml:19
+#, kde-format
+msgctxt "temperature sensor"
+msgid "Charger"
+msgstr "Chargeur"
+
+#: kcm/ui/ThermalPage.qml:20
+#, kde-format
+msgctxt "temperature sensor on the case surface"
+msgid "Chassis"
+msgstr "Châssis"
+
+#: kcm/ui/ThermalPage.qml:21
+#, kde-format
+msgctxt "temperature sensor"
+msgid "SSD"
+msgstr "SSD"
+
+#: kcm/ui/ThermalPage.qml:22
+#, kde-format
+msgctxt "temperature sensor"
+msgid "GPU"
+msgstr "GPU"
+
+#: kcm/ui/ThermalPage.qml:23
+#, kde-format
+msgctxt "temperature sensor"
+msgid "Wi-Fi"
+msgstr "Wi-Fi"
+
+#: kcm/ui/ThermalPage.qml:30
+#, kde-format
+msgctxt "temperature sensor state"
+msgid "Off"
+msgstr "Éteint"
+
+#: kcm/ui/ThermalPage.qml:31
+#, kde-format
+msgctxt "temperature sensor state"
+msgid "Not calibrated"
+msgstr "Non calibré"
+
+#: kcm/ui/ThermalPage.qml:32
+#, kde-format
+msgctxt "temperature sensor state"
+msgid "Error"
+msgstr "Erreur"
+
+#: kcm/ui/ThermalPage.qml:38
+#, kde-format
+msgctxt "fan cooling the processor"
+msgid "CPU fan"
+msgstr "Ventilateur du processeur"
+
+#: kcm/ui/ThermalPage.qml:39
+#, kde-format
+msgid "Left fan"
+msgstr "Ventilateur gauche"
+
+#: kcm/ui/ThermalPage.qml:40
+#, kde-format
+msgid "Right fan"
+msgstr "Ventilateur droit"
+
+#: kcm/ui/ThermalPage.qml:41
+#, kde-format
+msgid "Front fan"
+msgstr "Ventilateur avant"
+
+#: kcm/ui/ThermalPage.qml:42
+#, kde-format
+msgid "Third fan"
+msgstr "Troisième ventilateur"
+
+#: kcm/ui/ThermalPage.qml:51
+#, kde-format
+msgid "Temperatures"
+msgstr "Températures"
+
+#: kcm/ui/ThermalPage.qml:75
+#, kde-format
+msgctxt "degrees celsius"
+msgid "%1 °C"
+msgstr "%1 °C"
+
+#: kcm/ui/ThermalPage.qml:94
+#, kde-format
+msgid "Throttling: unknown"
+msgstr "Bridage thermique : inconnu"
+
+#: kcm/ui/ThermalPage.qml:97
+#, kde-format
+msgid "Throttling: yes (PROCHOT)"
+msgstr "Bridage thermique : oui (PROCHOT)"
+
+#: kcm/ui/ThermalPage.qml:99
+#, kde-format
+msgid "Throttling: yes (soft limit)"
+msgstr "Bridage thermique : oui (limite souple)"
+
+#: kcm/ui/ThermalPage.qml:99
+#, kde-format
+msgid "Not throttling"
+msgstr "Pas de bridage thermique"
+
+#: kcm/ui/ThermalPage.qml:108
+#, kde-format
+msgid "Fans"
+msgstr "Ventilateurs"
+
+#: kcm/ui/ThermalPage.qml:118
+#, kde-format
+msgctxt "fan name"
+msgid "%1:"
+msgstr "%1 :"
+
+#: kcm/ui/ThermalPage.qml:119
+#, kde-format
+msgid "Stalled"
+msgstr "Bloqué"
+
+#: kcm/ui/ThermalPage.qml:119 kcm/ui/ThermalPage.qml:157
+#, kde-format
+msgid "%1 RPM"
+msgstr "%1 tr/min"
+
+#: kcm/ui/ThermalPage.qml:124
+#, kde-format
+msgid "Fan control:"
+msgstr "Contrôle des ventilateurs :"
+
+#: kcm/ui/ThermalPage.qml:128
+#, kde-format
+msgid "Fixed duty cycle"
+msgstr "Rapport cyclique fixe"
+
+#: kcm/ui/ThermalPage.qml:129
+#, kde-format
+msgid "Fixed speed"
+msgstr "Vitesse fixe"
+
+#: kcm/ui/ThermalPage.qml:165
+#, kde-format
+msgid ""
+"The EC still shuts the system down if it overheats, but a fixed fan speed "
+"can let it run hot and throttle. Fans go back to automatic when the service "
+"stops or the laptop reboots."
+msgstr ""
+"L'EC éteint toujours le système en cas de surchauffe, mais une vitesse de "
+"ventilateur fixe peut le laisser chauffer et brider ses performances. Les "
+"ventilateurs repassent en mode automatique à l'arrêt du service ou au "
+"redémarrage du portable."
