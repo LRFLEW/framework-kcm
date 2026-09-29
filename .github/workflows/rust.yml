@@ -10,7 +10,6 @@ defaults:
 
 jobs:
   rustfmt:
-    if: (github.event_name != 'pull_request' && ! github.event.pull_request.head.repo.fork) || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -29,7 +28,6 @@ jobs:
   clippy:
     permissions:
       security-events: write
-    if: (github.event_name != 'pull_request' && ! github.event.pull_request.head.repo.fork) || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -60,8 +58,7 @@ jobs:
           sarif_file: daemon/rust-clippy-results.sarif
           wait-for-processing: true
   test:
-    if: (github.event_name != 'pull_request' && ! github.event.pull_request.head.repo.fork) || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork)
-    runs-on: ${{ inputs.test-runs-on }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -92,7 +89,7 @@ jobs:
         run: cargo fetch --locked
 
       - name: Build
-        run: cargo build --frozen ${{ inputs.test-cargo-flags }}
+        run: cargo build --frozen
 
       - name: Run tests
-        run: cargo test ${{ inputs.test-cargo-flags }}
+        run: cargo test
