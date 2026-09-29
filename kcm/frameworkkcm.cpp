@@ -105,7 +105,8 @@ FrameworkKcm::FrameworkKcm(QObject *parent, const KPluginMetaData &data) : KQuic
     connect(&m_liveTimer, &QTimer::timeout, this, &FrameworkKcm::refreshLive);
 }
 
-void FrameworkKcm::call(const QString &method, const QVariantList &args, const ReplyHandler& onReply, const ErrorHandler& onError, const int timeout) {
+void FrameworkKcm::call(const QString &method, const QVariantList &args, const ReplyHandler &onReply,
+                        const ErrorHandler &onError, const int timeout) {
     auto msg = QDBusMessage::createMethodCall(s_service, s_path, s_interface, method);
     msg.setArguments(args);
     msg.setInteractiveAuthorizationAllowed(true);

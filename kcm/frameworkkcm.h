@@ -119,8 +119,8 @@ private:
     using ReplyHandler = std::function<void(const QDBusMessage &)>;
     using ErrorHandler = std::function<void(const QDBusError &)>;
 
-    void call(const QString &method, const QVariantList &args, const ReplyHandler& onReply, const ErrorHandler& onError = {},
-              int timeout = -1);
+    void call(const QString &method, const QVariantList &args, const ReplyHandler &onReply,
+              const ErrorHandler &onError = {}, int timeout = -1);
     void refreshLive();
     void loadSettings();
     template<typename T>

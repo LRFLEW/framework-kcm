@@ -3,6 +3,9 @@ permissions:
   contents: read
 on:
   push:
+    paths:
+      - "daemon"
+      - ".github/workflows/rust.yml"
 
 defaults:
   run:
