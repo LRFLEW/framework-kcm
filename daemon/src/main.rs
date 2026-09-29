@@ -71,7 +71,12 @@ impl Daemon {
         blocking(move || f(&lock(&inner.ec))).await
     }
 
-    async fn authorize(&self, conn: &Connection, hdr: &Header<'_>, action: &str) -> Result<(), Error> {
+    async fn authorize(
+        &self,
+        conn: &Connection,
+        hdr: &Header<'_>,
+        action: &str,
+    ) -> Result<(), Error> {
         if polkit::check(conn, hdr, action).await? {
             Ok(())
         } else {
@@ -88,20 +93,36 @@ impl Daemon {
     /// Re-apply settings the hardware forgets or can't report back.
     async fn reapply(&self) {
         let state = lock(&self.0.state).clone();
-        if let Some(o) = state.charge_limit_override.filter(|o| o.boot_id != state::boot_id()) {
+        if let Some(o) = state
+            .charge_limit_override
+            .filter(|o| o.boot_id != state::boot_id())
+        {
             let max = o.restore_max as i32;
             // On failure keep the override so we try again on the next start
-            if restore("charge limit after override", self.with_ec(move |ec| ec::set_charge_limit(ec, max))).await {
+            if restore(
+                "charge limit after override",
+                self.with_ec(move |ec| ec::set_charge_limit(ec, max)),
+            )
+            .await
+            {
                 log::info!("Charge limit override ended, restored limit to {max}%");
                 self.update_state(|s| s.charge_limit_override = None);
             }
         }
         if let Some(rate) = state.charge_rate_limit.filter(|r| *r < 1.0) {
             let soc = state.charge_rate_soc;
-            restore("charge rate limit", self.with_ec(move |ec| ec::set_charge_rate_limit(ec, rate, soc))).await;
+            restore(
+                "charge rate limit",
+                self.with_ec(move |ec| ec::set_charge_rate_limit(ec, rate, soc)),
+            )
+            .await;
         }
         if let Some(v) = state.haptic_intensity {
-            restore("haptic intensity", blocking(move || ec::set_haptic_intensity(v as i32))).await;
+            restore(
+                "haptic intensity",
+                blocking(move || ec::set_haptic_intensity(v as i32)),
+            )
+            .await;
         }
         if let Some(force) = state.click_force {
             restore("click force", blocking(move || ec::set_click_force(&force))).await;
@@ -111,7 +132,11 @@ impl Daemon {
     /// Hand fans back to the EC so we never leave them pinned when we exit.
     async fn restore_auto_fan(&self) {
         if *lock(&self.0.fan) != FanControl::Auto {
-            restore("automatic fan control", self.with_ec(|ec| ec::set_auto_fan(ec, -1))).await;
+            restore(
+                "automatic fan control",
+                self.with_ec(|ec| ec::set_auto_fan(ec, -1)),
+            )
+            .await;
         }
     }
 }
@@ -162,7 +187,10 @@ impl Daemon {
         let (_, max) = self.with_ec(ec::charge_limit).await?;
         let state = lock(&self.0.state).clone();
         // While overridden the EC is at 100%; report the user's limit instead
-        let limit = state.charge_limit_override.as_ref().map_or(max, |o| o.restore_max);
+        let limit = state
+            .charge_limit_override
+            .as_ref()
+            .map_or(max, |o| o.restore_max);
         Ok(dict! {
             "maxLimit" => limit as i32,
             "overrideActive" => state.charge_limit_override.is_some(),
@@ -188,7 +216,10 @@ impl Daemon {
     async fn get_input(&self) -> Result<Dict, Error> {
         let fp = self.with_ec(|ec| Ok(ec::fp_led(ec))).await?;
         let state = lock(&self.0.state).clone();
-        let (fp_percent, fp_level) = fp.as_ref().map(|(p, l)| (*p as i32, l.clone())).unwrap_or((-1, String::new()));
+        let (fp_percent, fp_level) = fp
+            .as_ref()
+            .map(|(p, l)| (*p as i32, l.clone()))
+            .unwrap_or((-1, String::new()));
         Ok(dict! {
             "fpLedSupported" => fp.is_ok(),
             "fpLedPercent" => fp_percent,
@@ -211,7 +242,8 @@ impl Daemon {
         max: i32,
     ) -> Result<(), Error> {
         self.authorize(conn, &hdr, polkit::ACTION_BATTERY).await?;
-        self.with_ec(move |ec| ec::set_charge_limit(ec, max)).await?;
+        self.with_ec(move |ec| ec::set_charge_limit(ec, max))
+            .await?;
         // An explicitly chosen limit replaces any pending override
         if lock(&self.0.state).charge_limit_override.is_some() {
             self.update_state(|s| s.charge_limit_override = None);
@@ -235,7 +267,10 @@ impl Daemon {
         }
         self.with_ec(|ec| ec::set_charge_limit(ec, 100)).await?;
         self.update_state(|s| {
-            s.charge_limit_override = Some(ChargeLimitOverride { restore_max: max, boot_id: state::boot_id() })
+            s.charge_limit_override = Some(ChargeLimitOverride {
+                restore_max: max,
+                boot_id: state::boot_id(),
+            })
         });
         Ok(())
     }
@@ -251,7 +286,8 @@ impl Daemon {
             return Ok(());
         };
         let max = o.restore_max as i32;
-        self.with_ec(move |ec| ec::set_charge_limit(ec, max)).await?;
+        self.with_ec(move |ec| ec::set_charge_limit(ec, max))
+            .await?;
         self.update_state(|s| s.charge_limit_override = None);
         Ok(())
     }
@@ -266,7 +302,8 @@ impl Daemon {
     ) -> Result<(), Error> {
         self.authorize(conn, &hdr, polkit::ACTION_BATTERY).await?;
         let soc = (soc >= 0.0).then_some(soc);
-        self.with_ec(move |ec| ec::set_charge_rate_limit(ec, rate, soc)).await?;
+        self.with_ec(move |ec| ec::set_charge_rate_limit(ec, rate, soc))
+            .await?;
         self.update_state(|s| {
             s.charge_rate_limit = Some(rate);
             s.charge_rate_soc = soc;
@@ -285,7 +322,8 @@ impl Daemon {
         percent: i32,
     ) -> Result<(), Error> {
         self.authorize(conn, &hdr, polkit::ACTION_FAN).await?;
-        self.with_ec(move |ec| ec::set_fan_duty(ec, fan, percent)).await?;
+        self.with_ec(move |ec| ec::set_fan_duty(ec, fan, percent))
+            .await?;
         *lock(&self.0.fan) = FanControl::Duty(percent);
         Ok(())
     }
@@ -298,7 +336,8 @@ impl Daemon {
         rpm: i32,
     ) -> Result<(), Error> {
         self.authorize(conn, &hdr, polkit::ACTION_FAN).await?;
-        self.with_ec(move |ec| ec::set_fan_rpm(ec, fan, rpm)).await?;
+        self.with_ec(move |ec| ec::set_fan_rpm(ec, fan, rpm))
+            .await?;
         *lock(&self.0.fan) = FanControl::Rpm(rpm);
         Ok(())
     }
@@ -324,7 +363,8 @@ impl Daemon {
         level: String,
     ) -> Result<(), Error> {
         self.authorize(conn, &hdr, polkit::ACTION_INPUT).await?;
-        self.with_ec(move |ec| ec::set_fp_led_level(ec, &level)).await
+        self.with_ec(move |ec| ec::set_fp_led_level(ec, &level))
+            .await
     }
 
     async fn set_haptic_intensity(
