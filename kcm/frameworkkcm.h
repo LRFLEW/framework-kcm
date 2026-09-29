@@ -27,8 +27,7 @@ struct FrameworkSettings {
     bool operator==(const FrameworkSettings &) const = default;
 };
 
-class FrameworkKcm : public KQuickConfigModule
-{
+class FrameworkKcm : public KQuickConfigModule {
     Q_OBJECT
 
     Q_PROPERTY(bool daemonAvailable READ daemonAvailable NOTIFY daemonAvailableChanged)
@@ -120,10 +119,7 @@ private:
     using ReplyHandler = std::function<void(const QDBusMessage &)>;
     using ErrorHandler = std::function<void(const QDBusError &)>;
 
-    void call(const QString &method,
-              const QVariantList &args,
-              ReplyHandler onReply,
-              ErrorHandler onError = {},
+    void call(const QString &method, const QVariantList &args, ReplyHandler onReply, ErrorHandler onError = {},
               int timeout = -1);
     void refreshLive();
     void loadSettings();

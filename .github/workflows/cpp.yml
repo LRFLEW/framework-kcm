@@ -1,0 +1,26 @@
+name: C++ CI
+"on":
+  push:
+    paths:
+      - "kcm/**"
+      - "CMakeLists.txt"
+      - ".clang-format"
+      - ".clang-tidy"
+      - ".github/workflows/cpp.yml"
+  workflow_dispatch:
+
+jobs:
+  ci:
+    permissions:
+      contents: read
+      security-events: write
+    uses: FyraLabs/actions/.github/workflows/cpp.yml@main
+    with:
+      container: ghcr.io/terrapkg/builder:f44
+      packages: cmake extra-cmake-modules qt6-qtbase-devel qt6-qtdeclarative-devel kf6-kcmutils-devel kf6-kirigami-devel kf6-ki18n-devel
+      configure-command: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DBUILD_DAEMON=OFF
+      cppcheck-extra-args: >-
+        --suppress=preprocessorErrorDirective
+        --suppress=unknownMacro
+      build-command: cmake --build build --parallel
+      test-command: ctest --test-dir build --output-on-failure
