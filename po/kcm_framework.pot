@@ -207,33 +207,6 @@ msgid ""
 "starts."
 msgstr ""
 
-#: kcm/ui/main.qml:21
-#, kde-format
-msgid ""
-"Could not reach the Framework hardware service (framework-kcmd). Make sure "
-"it is installed and that D-Bus activation or the systemd unit is enabled."
-msgstr ""
-
-#: kcm/ui/main.qml:38
-#, kde-format
-msgid "Battery"
-msgstr ""
-
-#: kcm/ui/main.qml:39
-#, kde-format
-msgid "Fans & Thermals"
-msgstr ""
-
-#: kcm/ui/main.qml:40
-#, kde-format
-msgid "Touchpad & LED"
-msgstr ""
-
-#: kcm/ui/main.qml:41
-#, kde-format
-msgid "System"
-msgstr ""
-
 #: kcm/ui/SystemPage.qml:18
 #, kde-format
 msgctxt "USB-C port location"
@@ -628,4 +601,31 @@ msgid ""
 "The EC still shuts the system down if it overheats, but a fixed fan speed "
 "can let it run hot and throttle. Fans go back to automatic when the service "
 "stops or the laptop reboots."
+msgstr ""
+
+#: kcm/ui/main.qml:21
+#, kde-format
+msgid ""
+"Could not reach the Framework hardware service (framework-kcmd). Make sure "
+"it is installed and that D-Bus activation or the systemd unit is enabled."
+msgstr ""
+
+#: kcm/ui/main.qml:38
+#, kde-format
+msgid "Battery"
+msgstr ""
+
+#: kcm/ui/main.qml:39
+#, kde-format
+msgid "Fans & Thermals"
+msgstr ""
+
+#: kcm/ui/main.qml:40
+#, kde-format
+msgid "Touchpad & LED"
+msgstr ""
+
+#: kcm/ui/main.qml:41
+#, kde-format
+msgid "System"
 msgstr ""

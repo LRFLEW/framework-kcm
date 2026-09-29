@@ -219,36 +219,6 @@ msgstr ""
 "teruggeven, dus hier staat wat hier het laatst is ingesteld. De dienst past "
 "ze opnieuw toe wanneer hij start."
 
-#: kcm/ui/main.qml:21
-#, kde-format
-msgid ""
-"Could not reach the Framework hardware service (framework-kcmd). Make sure "
-"it is installed and that D-Bus activation or the systemd unit is enabled."
-msgstr ""
-"Kan de Framework-hardwaredienst (framework-kcmd) niet bereiken. Zorg ervoor "
-"dat deze is geïnstalleerd en dat D-Bus-activering of de systemd-unit is "
-"ingeschakeld."
-
-#: kcm/ui/main.qml:38
-#, kde-format
-msgid "Battery"
-msgstr "Accu"
-
-#: kcm/ui/main.qml:39
-#, kde-format
-msgid "Fans & Thermals"
-msgstr "Ventilatoren en temperatuur"
-
-#: kcm/ui/main.qml:40
-#, kde-format
-msgid "Touchpad & LED"
-msgstr "Touchpad en led"
-
-#: kcm/ui/main.qml:41
-#, kde-format
-msgid "System"
-msgstr "Systeem"
-
 #: kcm/ui/SystemPage.qml:18
 #, kde-format
 msgctxt "USB-C port location"
@@ -649,3 +619,33 @@ msgstr ""
 "een vaste ventilatorsnelheid kan het heet worden en gaan throttlen. De "
 "ventilatoren gaan terug naar automatisch wanneer de dienst stopt of de "
 "laptop opnieuw start."
+
+#: kcm/ui/main.qml:21
+#, kde-format
+msgid ""
+"Could not reach the Framework hardware service (framework-kcmd). Make sure "
+"it is installed and that D-Bus activation or the systemd unit is enabled."
+msgstr ""
+"Kan de Framework-hardwaredienst (framework-kcmd) niet bereiken. Zorg ervoor "
+"dat deze is geïnstalleerd en dat D-Bus-activering of de systemd-unit is "
+"ingeschakeld."
+
+#: kcm/ui/main.qml:38
+#, kde-format
+msgid "Battery"
+msgstr "Accu"
+
+#: kcm/ui/main.qml:39
+#, kde-format
+msgid "Fans & Thermals"
+msgstr "Ventilatoren en temperatuur"
+
+#: kcm/ui/main.qml:40
+#, kde-format
+msgid "Touchpad & LED"
+msgstr "Touchpad en led"
+
+#: kcm/ui/main.qml:41
+#, kde-format
+msgid "System"
+msgstr "Systeem"

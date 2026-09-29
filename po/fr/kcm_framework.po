@@ -219,36 +219,6 @@ msgstr ""
 "renvoyer ces paramètres : ceci affiche la dernière valeur définie ici. Le "
 "service les réapplique à son démarrage."
 
-#: kcm/ui/main.qml:21
-#, kde-format
-msgid ""
-"Could not reach the Framework hardware service (framework-kcmd). Make sure "
-"it is installed and that D-Bus activation or the systemd unit is enabled."
-msgstr ""
-"Impossible de joindre le service matériel Framework (framework-kcmd). "
-"Vérifiez qu'il est installé et que l'activation D-Bus ou l'unité systemd est "
-"activée."
-
-#: kcm/ui/main.qml:38
-#, kde-format
-msgid "Battery"
-msgstr "Batterie"
-
-#: kcm/ui/main.qml:39
-#, kde-format
-msgid "Fans & Thermals"
-msgstr "Ventilateurs et températures"
-
-#: kcm/ui/main.qml:40
-#, kde-format
-msgid "Touchpad & LED"
-msgstr "Pavé tactile et voyant"
-
-#: kcm/ui/main.qml:41
-#, kde-format
-msgid "System"
-msgstr "Système"
-
 #: kcm/ui/SystemPage.qml:18
 #, kde-format
 msgctxt "USB-C port location"
@@ -650,3 +620,33 @@ msgstr ""
 "ventilateur fixe peut le laisser chauffer et brider ses performances. Les "
 "ventilateurs repassent en mode automatique à l'arrêt du service ou au "
 "redémarrage du portable."
+
+#: kcm/ui/main.qml:21
+#, kde-format
+msgid ""
+"Could not reach the Framework hardware service (framework-kcmd). Make sure "
+"it is installed and that D-Bus activation or the systemd unit is enabled."
+msgstr ""
+"Impossible de joindre le service matériel Framework (framework-kcmd). "
+"Vérifiez qu'il est installé et que l'activation D-Bus ou l'unité systemd est "
+"activée."
+
+#: kcm/ui/main.qml:38
+#, kde-format
+msgid "Battery"
+msgstr "Batterie"
+
+#: kcm/ui/main.qml:39
+#, kde-format
+msgid "Fans & Thermals"
+msgstr "Ventilateurs et températures"
+
+#: kcm/ui/main.qml:40
+#, kde-format
+msgid "Touchpad & LED"
+msgstr "Pavé tactile et voyant"
+
+#: kcm/ui/main.qml:41
+#, kde-format
+msgid "System"
+msgstr "Système"

@@ -218,36 +218,6 @@ msgstr ""
 "zurückmelden, daher wird angezeigt, was hier zuletzt eingestellt wurde. Der "
 "Dienst setzt sie beim Start erneut."
 
-#: kcm/ui/main.qml:21
-#, kde-format
-msgid ""
-"Could not reach the Framework hardware service (framework-kcmd). Make sure "
-"it is installed and that D-Bus activation or the systemd unit is enabled."
-msgstr ""
-"Der Framework-Hardwaredienst (framework-kcmd) ist nicht erreichbar. Stellen "
-"Sie sicher, dass er installiert ist und die D-Bus-Aktivierung oder die "
-"systemd-Unit aktiviert ist."
-
-#: kcm/ui/main.qml:38
-#, kde-format
-msgid "Battery"
-msgstr "Akku"
-
-#: kcm/ui/main.qml:39
-#, kde-format
-msgid "Fans & Thermals"
-msgstr "Lüfter & Temperaturen"
-
-#: kcm/ui/main.qml:40
-#, kde-format
-msgid "Touchpad & LED"
-msgstr "Touchpad & LED"
-
-#: kcm/ui/main.qml:41
-#, kde-format
-msgid "System"
-msgstr "System"
-
 #: kcm/ui/SystemPage.qml:18
 #, kde-format
 msgctxt "USB-C port location"
@@ -649,3 +619,33 @@ msgstr ""
 "Lüfterdrehzahl kann es heiß werden und gedrosselt werden. Die Lüfter kehren "
 "zur automatischen Steuerung zurück, wenn der Dienst beendet oder der Laptop "
 "neu gestartet wird."
+
+#: kcm/ui/main.qml:21
+#, kde-format
+msgid ""
+"Could not reach the Framework hardware service (framework-kcmd). Make sure "
+"it is installed and that D-Bus activation or the systemd unit is enabled."
+msgstr ""
+"Der Framework-Hardwaredienst (framework-kcmd) ist nicht erreichbar. Stellen "
+"Sie sicher, dass er installiert ist und die D-Bus-Aktivierung oder die "
+"systemd-Unit aktiviert ist."
+
+#: kcm/ui/main.qml:38
+#, kde-format
+msgid "Battery"
+msgstr "Akku"
+
+#: kcm/ui/main.qml:39
+#, kde-format
+msgid "Fans & Thermals"
+msgstr "Lüfter & Temperaturen"
+
+#: kcm/ui/main.qml:40
+#, kde-format
+msgid "Touchpad & LED"
+msgstr "Touchpad & LED"
+
+#: kcm/ui/main.qml:41
+#, kde-format
+msgid "System"
+msgstr "System"

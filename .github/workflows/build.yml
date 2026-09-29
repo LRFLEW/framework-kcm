@@ -51,6 +51,8 @@ jobs:
 
       - name: Check translations are up to date
         run: |
+          # The checkout belongs to another user than the container's root
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           po/update.sh
           # POT-Creation-Date always changes; anything else means stale .po files
           if ! git diff --quiet -I '^"POT-Creation-Date:' -- po; then
