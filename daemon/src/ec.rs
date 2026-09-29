@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: GPL-3.0-or-later
 //! Blocking hardware access through framework_lib. Everything here runs on a
 //! blocking thread with the EC mutex held; results are plain a{sv} dicts so
 //! the D-Bus layer stays thin.

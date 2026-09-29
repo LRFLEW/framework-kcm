@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: GPL-3.0-or-later
 //! framework-kcmd: exposes Framework Laptop EC controls on the system bus.
 //!
 //! Reads are unrestricted, writes are gated by polkit actions

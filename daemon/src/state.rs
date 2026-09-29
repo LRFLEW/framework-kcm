@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: GPL-3.0-or-later
 //! Settings the hardware can't report back (write-only HID reports, charge
 //! current limit). We remember what was last set so the UI can show it and
 //! so we can re-apply it when the daemon starts.

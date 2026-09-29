@@ -9,7 +9,7 @@ pkgrel=1
 pkgdesc='System Settings module for Framework laptops: charge limit, fans, touchpad, LEDs and firmware info'
 arch=('x86_64')
 url='https://github.com/OWNER/framework-kcm'
-license=('GPL-2.0-or-later')
+license=('GPL-3.0-or-later')
 # dbus, kirigami, polkit and qt6-declarative are only used at runtime (bus
 # policy, QML modules), so namcap can't see them
 depends=(

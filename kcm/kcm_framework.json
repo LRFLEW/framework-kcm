@@ -12,7 +12,7 @@
         "Description[fr]": "Charge de la batterie, ventilateurs, pavé tactile, voyants et informations sur le micrologiciel des portables Framework",
         "Description[nl]": "Accu opladen, ventilatoren, touchpad, leds en firmware-informatie voor Framework-laptops",
         "Icon": "framework-kcm",
-        "License": "GPL-2.0-or-later",
+        "License": "GPL-3.0-or-later",
         "Name": "Framework Laptop",
         "Name[de]": "Framework-Laptop",
         "Name[es]": "Portátil Framework",

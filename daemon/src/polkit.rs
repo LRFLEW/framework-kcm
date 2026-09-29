@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: GPL-3.0-or-later
 //! Asks polkit whether the D-Bus caller may perform an action, letting polkit
 //! prompt for a password.
 
