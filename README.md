@@ -78,6 +78,31 @@ kcmshell6 kcm_framework             # or System Settings → System → Framewor
 
 To build only the KCM (for example, to iterate on the QML): `-DBUILD_DAEMON=OFF`.
 
+## Packages & releases
+
+GitHub Actions (`.github/workflows/build.yml`) builds everything on every push
+and pull request. Pushing a `v*` tag also builds packages and attaches them
+to a GitHub release:
+
+| Distribution | Package | Built with |
+|---|---|---|
+| Arch Linux | `framework-kcm-<version>-1-x86_64.pkg.tar.zst` | `packaging/arch/PKGBUILD` and `makepkg` |
+| Ubuntu 26.04 | `framework-kcm_<version>_amd64.deb` | CPack (`packaging/cpack.cmake`) |
+
+```sh
+sudo pacman -U framework-kcm-*.pkg.tar.zst   # Arch; then: sudo systemctl enable --now framework-kcmd
+sudo apt install ./framework-kcm_*.deb       # Ubuntu; enables and starts the service
+```
+
+To release, bump the version in `CMakeLists.txt` (`project(... VERSION ...)`)
+and `daemon/Cargo.toml`, commit, then tag it:
+
+```sh
+git tag v0.2.0 && git push origin v0.2.0
+```
+
+The workflow refuses to package a tag that doesn't match both versions.
+
 ## Poking the daemon directly
 
 ```sh

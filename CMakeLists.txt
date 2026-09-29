@@ -26,7 +26,7 @@ if(BUILD_DAEMON)
     find_program(CARGO cargo REQUIRED)
     set(CARGO_TARGET_DIR "${CMAKE_BINARY_DIR}/cargo")
     add_custom_target(framework-kcmd ALL
-        COMMAND ${CARGO} build --release
+        COMMAND ${CARGO} build --release --locked
             --manifest-path "${CMAKE_SOURCE_DIR}/daemon/Cargo.toml"
             --target-dir "${CARGO_TARGET_DIR}"
         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/daemon"
@@ -50,5 +50,7 @@ install(FILES data/icons/framework-kcm.svg DESTINATION ${KDE_INSTALL_ICONDIR}/hi
 
 add_subdirectory(kcm)
 ki18n_install(po)
+
+include(packaging/cpack.cmake)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

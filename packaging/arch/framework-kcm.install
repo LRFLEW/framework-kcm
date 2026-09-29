@@ -1,0 +1,9 @@
+post_install() {
+  echo "framework-kcmd starts on demand when you open System Settings → Framework Laptop."
+  echo "To re-apply touchpad and charge-rate settings at boot, enable it:"
+  echo "  systemctl enable --now framework-kcmd"
+}
+
+pre_remove() {
+  systemctl disable --now framework-kcmd.service >/dev/null 2>&1 || true
+}
