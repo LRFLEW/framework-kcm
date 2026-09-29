@@ -14,7 +14,8 @@ pub const ACTION_INPUT: &str = "io.github.frameworkkcm.input";
 
 /// Returns Ok(true) if the sender of the message with header `hdr` is authorized for `action_id`.
 pub async fn check(conn: &Connection, hdr: &Header<'_>, action_id: &str) -> zbus::Result<bool> {
-    let subject = Subject::new_for_message_header(hdr).map_err(|e| zbus::Error::Failure(e.to_string()))?;
+    let subject =
+        Subject::new_for_message_header(hdr).map_err(|e| zbus::Error::Failure(e.to_string()))?;
     let result = AuthorityProxy::new(conn)
         .await?
         .check_authorization(

@@ -102,18 +102,32 @@ fn pd_versions(ec: &CrosEc) -> Vec<Dict> {
     };
     match ccgx::get_pd_controller_versions(ec) {
         Ok(PdVersions::RightLeft((right, left))) => {
-            vec![pd("right", 0, right.active_fw_ver()), pd("left", 1, left.active_fw_ver())]
+            vec![
+                pd("right", 0, right.active_fw_ver()),
+                pd("left", 1, left.active_fw_ver()),
+            ]
         }
         Ok(PdVersions::Single(p)) => vec![pd("", 0, p.active_fw_ver())],
-        Ok(PdVersions::Many(pds)) => pds.iter().enumerate().map(|(i, p)| pd("", i, p.active_fw_ver())).collect(),
+        Ok(PdVersions::Many(pds)) => pds
+            .iter()
+            .enumerate()
+            .map(|(i, p)| pd("", i, p.active_fw_ver()))
+            .collect(),
         // Not every platform exposes the PD chips over I2C passthrough,
         // fall back to asking the EC
         Err(_) => match power::read_pd_version(ec) {
             Ok(MainPdVersions::RightLeft((right, left))) => {
-                vec![pd("right", 0, right.app.to_string()), pd("left", 1, left.app.to_string())]
+                vec![
+                    pd("right", 0, right.app.to_string()),
+                    pd("left", 1, left.app.to_string()),
+                ]
             }
             Ok(MainPdVersions::Single(p)) => vec![pd("", 0, p.app.to_string())],
-            Ok(MainPdVersions::Many(pds)) => pds.iter().enumerate().map(|(i, p)| pd("", i, p.app.to_string())).collect(),
+            Ok(MainPdVersions::Many(pds)) => pds
+                .iter()
+                .enumerate()
+                .map(|(i, p)| pd("", i, p.app.to_string()))
+                .collect(),
             Err(_) => vec![],
         },
     }
@@ -297,7 +311,12 @@ fn fp_level_name(level: &FpLedBrightnessLevel) -> &'static str {
 
 pub fn fp_led(ec: &CrosEc) -> Result<(u8, String), String> {
     let (percent, level) = ok(ec.get_fp_led_level())?;
-    Ok((percent, level.map(|l| fp_level_name(&l).to_string()).unwrap_or_default()))
+    Ok((
+        percent,
+        level
+            .map(|l| fp_level_name(&l).to_string())
+            .unwrap_or_default(),
+    ))
 }
 
 pub fn set_fp_led_level(ec: &CrosEc, level: &str) -> Result<(), String> {
@@ -323,7 +342,9 @@ pub fn set_click_force(force: &str) -> Result<(), String> {
 pub fn ports(ec: &CrosEc) -> Vec<Dict> {
     // All Framework laptops so far have 4 PD ports; same positions as framework_tool --pdports
     let positions = match smbios::get_family() {
-        Some(PlatformFamily::Framework16) => ["right-back", "right-middle", "left-middle", "left-back"],
+        Some(PlatformFamily::Framework16) => {
+            ["right-back", "right-middle", "left-middle", "left-back"]
+        }
         _ => ["right-back", "right-front", "left-front", "left-back"],
     };
     power::get_pd_info(ec, positions.len() as u8)
