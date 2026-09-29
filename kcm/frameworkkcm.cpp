@@ -14,106 +14,99 @@ K_PLUGIN_CLASS_WITH_JSON(FrameworkKcm, "kcm_framework.json")
 
 using namespace Qt::StringLiterals;
 
-namespace
-{
-const QString s_service = u"io.github.frameworkkcm.Daemon1"_s;
-const QString s_path = u"/io/github/frameworkkcm/Daemon1"_s;
-const QString s_interface = u"io.github.frameworkkcm.Daemon1"_s;
+namespace {
+    const QString s_service = u"io.github.frameworkkcm.Daemon1"_s;
+    const QString s_path = u"/io/github/frameworkkcm/Daemon1"_s;
+    const QString s_interface = u"io.github.frameworkkcm.Daemon1"_s;
 
-constexpr int s_liveInterval = 2000;
-// Writes may wait on a polkit password prompt
-constexpr int s_writeTimeout = 5 * 60 * 1000;
+    constexpr int s_liveInterval = 2000;
+    // Writes may wait on a polkit password prompt
+    constexpr int s_writeTimeout = 5 * 60 * 1000;
 
-// Recursively turn QDBusArgument/QDBusVariant into plain QVariantMap/List,
-// which is what QML can work with.
-QVariant demarshall(const QVariant &value)
-{
-    if (value.metaType() == QMetaType::fromType<QDBusVariant>()) {
-        return demarshall(value.value<QDBusVariant>().variant());
-    }
-    if (value.metaType() != QMetaType::fromType<QDBusArgument>()) {
-        return value;
-    }
-
-    const auto arg = value.value<QDBusArgument>();
-    switch (arg.currentType()) {
-    case QDBusArgument::MapType: {
-        QVariantMap map;
-        arg.beginMap();
-        while (!arg.atEnd()) {
-            arg.beginMapEntry();
-            const QString key = demarshall(arg.asVariant()).toString();
-            map.insert(key, demarshall(arg.asVariant()));
-            arg.endMapEntry();
+    // Recursively turn QDBusArgument/QDBusVariant into plain QVariantMap/List,
+    // which is what QML can work with.
+    QVariant demarshall(const QVariant &value) {
+        if (value.metaType() == QMetaType::fromType<QDBusVariant>()) {
+            return demarshall(value.value<QDBusVariant>().variant());
         }
-        arg.endMap();
-        return map;
-    }
-    case QDBusArgument::ArrayType: {
-        QVariantList list;
-        arg.beginArray();
-        while (!arg.atEnd()) {
-            list.append(demarshall(arg.asVariant()));
+        if (value.metaType() != QMetaType::fromType<QDBusArgument>()) {
+            return value;
         }
-        arg.endArray();
-        return list;
-    }
-    case QDBusArgument::StructureType: {
-        QVariantList list;
-        arg.beginStructure();
-        while (!arg.atEnd()) {
-            list.append(demarshall(arg.asVariant()));
+
+        const auto arg = value.value<QDBusArgument>();
+        switch (arg.currentType()) {
+        case QDBusArgument::MapType: {
+            QVariantMap map;
+            arg.beginMap();
+            while (!arg.atEnd()) {
+                arg.beginMapEntry();
+                const QString key = demarshall(arg.asVariant()).toString();
+                map.insert(key, demarshall(arg.asVariant()));
+                arg.endMapEntry();
+            }
+            arg.endMap();
+            return map;
         }
-        arg.endStructure();
-        return list;
+        case QDBusArgument::ArrayType: {
+            QVariantList list;
+            arg.beginArray();
+            while (!arg.atEnd()) {
+                list.append(demarshall(arg.asVariant()));
+            }
+            arg.endArray();
+            return list;
+        }
+        case QDBusArgument::StructureType: {
+            QVariantList list;
+            arg.beginStructure();
+            while (!arg.atEnd()) {
+                list.append(demarshall(arg.asVariant()));
+            }
+            arg.endStructure();
+            return list;
+        }
+        default:
+            return demarshall(arg.asVariant());
+        }
     }
-    default:
-        return demarshall(arg.asVariant());
+
+    QVariant replyArg(const QDBusMessage &reply, int index) {
+        const auto args = reply.arguments();
+        return index < args.size() ? demarshall(args.at(index)) : QVariant();
     }
-}
 
-QVariant replyArg(const QDBusMessage &reply, int index)
-{
-    const auto args = reply.arguments();
-    return index < args.size() ? demarshall(args.at(index)) : QVariant();
-}
-
-// Resets the fields defaults() covers, keeping the rest
-FrameworkSettings withDefaults(FrameworkSettings s)
-{
-    const FrameworkSettings d;
-    s.chargeLimit = d.chargeLimit;
-    s.chargeRateLimit = d.chargeRateLimit;
-    s.chargeRateSoc = d.chargeRateSoc;
-    s.fanMode = d.fanMode;
-    return s;
-}
-
-bool isServiceMissing(const QDBusError &error)
-{
-    switch (error.type()) {
-    case QDBusError::ServiceUnknown:
-    case QDBusError::NoReply:
-    case QDBusError::Disconnected:
-    case QDBusError::NoServer:
-        return true;
-    default:
-        return error.name().startsWith(u"org.freedesktop.DBus.Error.Spawn"_s);
+    // Resets the fields defaults() covers, keeping the rest
+    FrameworkSettings withDefaults(FrameworkSettings s) {
+        const FrameworkSettings d;
+        s.chargeLimit = d.chargeLimit;
+        s.chargeRateLimit = d.chargeRateLimit;
+        s.chargeRateSoc = d.chargeRateSoc;
+        s.fanMode = d.fanMode;
+        return s;
     }
-}
-}
 
-FrameworkKcm::FrameworkKcm(QObject *parent, const KPluginMetaData &data)
-    : KQuickConfigModule(parent, data)
-{
+    bool isServiceMissing(const QDBusError &error) {
+        switch (error.type()) {
+        case QDBusError::ServiceUnknown:
+        case QDBusError::NoReply:
+        case QDBusError::Disconnected:
+        case QDBusError::NoServer:
+            return true;
+        default:
+            return error.name().startsWith(u"org.freedesktop.DBus.Error.Spawn"_s);
+        }
+    }
+} // namespace
+
+FrameworkKcm::FrameworkKcm(QObject *parent, const KPluginMetaData &data) : KQuickConfigModule(parent, data) {
     setButtons(Help | Default | Apply);
 
     m_liveTimer.setInterval(s_liveInterval);
     connect(&m_liveTimer, &QTimer::timeout, this, &FrameworkKcm::refreshLive);
 }
 
-void FrameworkKcm::call(const QString &method, const QVariantList &args, ReplyHandler onReply, ErrorHandler onError, int timeout)
-{
+void FrameworkKcm::call(const QString &method, const QVariantList &args, ReplyHandler onReply, ErrorHandler onError,
+                        int timeout) {
     auto msg = QDBusMessage::createMethodCall(s_service, s_path, s_interface, method);
     msg.setArguments(args);
     msg.setInteractiveAuthorizationAllowed(true);
@@ -138,8 +131,7 @@ void FrameworkKcm::call(const QString &method, const QVariantList &args, ReplyHa
     });
 }
 
-void FrameworkKcm::load()
-{
+void FrameworkKcm::load() {
     KQuickConfigModule::load();
 
     // Reset: drop unsaved edits, then take whatever the hardware reports
@@ -158,16 +150,14 @@ void FrameworkKcm::load()
 
 // Take a value read from the daemon, keeping the user's unsaved edit if there is one
 template<typename T>
-void FrameworkKcm::syncSetting(T FrameworkSettings::*field, const T &value)
-{
+void FrameworkKcm::syncSetting(T FrameworkSettings::*field, const T &value) {
     if (m_current.*field == m_saved.*field) {
         m_current.*field = value;
     }
     m_saved.*field = value;
 }
 
-void FrameworkKcm::loadSettings()
-{
+void FrameworkKcm::loadSettings() {
     const auto onError = [this](const QDBusError &error) {
         if (!isServiceMissing(error)) {
             setError(error.message());
@@ -175,8 +165,7 @@ void FrameworkKcm::loadSettings()
     };
 
     call(
-        u"GetChargeSettings"_s,
-        {},
+        u"GetChargeSettings"_s, {},
         [this](const QDBusMessage &reply) {
             const auto map = replyArg(reply, 0).toMap();
             const bool overridden = map.value(u"overrideActive"_s).toBool();
@@ -192,8 +181,7 @@ void FrameworkKcm::loadSettings()
         onError);
 
     call(
-        u"GetFanControl"_s,
-        {},
+        u"GetFanControl"_s, {},
         [this](const QDBusMessage &reply) {
             const auto map = replyArg(reply, 0).toMap();
             const QString mode = map.value(u"mode"_s).toString();
@@ -209,8 +197,7 @@ void FrameworkKcm::loadSettings()
         onError);
 
     call(
-        u"GetInput"_s,
-        {},
+        u"GetInput"_s, {},
         [this](const QDBusMessage &reply) {
             const auto map = replyArg(reply, 0).toMap();
             m_fpLedSupported = map.value(u"fpLedSupported"_s).toBool();
@@ -223,8 +210,7 @@ void FrameworkKcm::loadSettings()
         onError);
 }
 
-void FrameworkKcm::setLiveData(const QString &liveData)
-{
+void FrameworkKcm::setLiveData(const QString &liveData) {
     if (m_liveData == liveData) {
         return;
     }
@@ -239,22 +225,18 @@ void FrameworkKcm::setLiveData(const QString &liveData)
     }
 }
 
-void FrameworkKcm::refreshLive()
-{
+void FrameworkKcm::refreshLive() {
     // Don't pile up requests if the EC is slow
     if (m_liveInFlight || m_liveData.isEmpty()) {
         return;
     }
     m_liveInFlight = true;
 
-    const auto done = [this](const QDBusError &) {
-        m_liveInFlight = false;
-    };
+    const auto done = [this](const QDBusError &) { m_liveInFlight = false; };
 
     if (m_liveData == u"thermal"_s) {
         call(
-            u"GetThermal"_s,
-            {},
+            u"GetThermal"_s, {},
             [this](const QDBusMessage &reply) {
                 m_liveInFlight = false;
                 const auto sensors = replyArg(reply, 0).toList();
@@ -271,8 +253,7 @@ void FrameworkKcm::refreshLive()
             done);
     } else if (m_liveData == u"ports"_s) {
         call(
-            u"GetPorts"_s,
-            {},
+            u"GetPorts"_s, {},
             [this](const QDBusMessage &reply) {
                 m_liveInFlight = false;
                 const auto ports = replyArg(reply, 0).toList();
@@ -285,8 +266,7 @@ void FrameworkKcm::refreshLive()
     }
 }
 
-FrameworkKcm::PendingWrite FrameworkKcm::fanWrite(const FrameworkSettings &s)
-{
+FrameworkKcm::PendingWrite FrameworkKcm::fanWrite(const FrameworkSettings &s) {
     if (s.fanMode == u"duty"_s) {
         return {u"SetFanDuty"_s, {-1, s.fanDuty}};
     }
@@ -296,8 +276,7 @@ FrameworkKcm::PendingWrite FrameworkKcm::fanWrite(const FrameworkSettings &s)
     return {u"SetAutoFan"_s, {-1}};
 }
 
-void FrameworkKcm::save()
-{
+void FrameworkKcm::save() {
     KQuickConfigModule::save();
 
     const auto &c = m_current;
@@ -328,8 +307,7 @@ void FrameworkKcm::save()
 }
 
 // One at a time, so polkit asks for the password once instead of per request
-void FrameworkKcm::runNextWrite()
-{
+void FrameworkKcm::runNextWrite() {
     if (m_writeQueue.isEmpty()) {
         setBusy(false);
         // Everything was written; reload merges in what the hardware now reports
@@ -341,11 +319,7 @@ void FrameworkKcm::runNextWrite()
     setBusy(true);
     const PendingWrite write = m_writeQueue.takeFirst();
     call(
-        write.method,
-        write.args,
-        [this](const QDBusMessage &) {
-            runNextWrite();
-        },
+        write.method, write.args, [this](const QDBusMessage &) { runNextWrite(); },
         [this](const QDBusError &error) {
             m_writeQueue.clear();
             setBusy(false);
@@ -356,23 +330,15 @@ void FrameworkKcm::runNextWrite()
         s_writeTimeout);
 }
 
-void FrameworkKcm::overrideChargeLimit()
-{
-    runAction(u"OverrideChargeLimit"_s);
-}
+void FrameworkKcm::overrideChargeLimit() { runAction(u"OverrideChargeLimit"_s); }
 
-void FrameworkKcm::cancelChargeLimitOverride()
-{
-    runAction(u"CancelChargeLimitOverride"_s);
-}
+void FrameworkKcm::cancelChargeLimitOverride() { runAction(u"CancelChargeLimitOverride"_s); }
 
-void FrameworkKcm::runAction(const QString &method)
-{
+void FrameworkKcm::runAction(const QString &method) {
     clearError();
     setBusy(true);
     call(
-        method,
-        {},
+        method, {},
         [this](const QDBusMessage &) {
             setBusy(false);
             loadSettings();
@@ -384,8 +350,7 @@ void FrameworkKcm::runAction(const QString &method)
         s_writeTimeout);
 }
 
-void FrameworkKcm::setWriteError(const QDBusError &error)
-{
+void FrameworkKcm::setWriteError(const QDBusError &error) {
     if (error.name() == u"io.github.frameworkkcm.Error.NotAuthorized"_s) {
         setError(i18n("You are not authorized to change this setting."));
     } else if (isServiceMissing(error)) {
@@ -395,29 +360,26 @@ void FrameworkKcm::setWriteError(const QDBusError &error)
     }
 }
 
-void FrameworkKcm::defaults()
-{
+void FrameworkKcm::defaults() {
     KQuickConfigModule::defaults();
 
     m_current = withDefaults(m_current);
     settingsEdited();
 }
 
-void FrameworkKcm::settingsEdited()
-{
+void FrameworkKcm::settingsEdited() {
     Q_EMIT settingsChanged();
     setNeedsSave(m_current != m_saved);
     setRepresentsDefaults(m_current == withDefaults(m_current));
 }
 
-#define SETTER(Name, member, Type)                                                                                                                             \
-    void FrameworkKcm::set##Name(Type value)                                                                                                                   \
-    {                                                                                                                                                          \
-        if (m_current.member == value) {                                                                                                                       \
-            return;                                                                                                                                            \
-        }                                                                                                                                                      \
-        m_current.member = value;                                                                                                                              \
-        settingsEdited();                                                                                                                                      \
+#define SETTER(Name, member, Type)                                                                                     \
+    void FrameworkKcm::set##Name(Type value) {                                                                         \
+        if (m_current.member == value) {                                                                               \
+            return;                                                                                                    \
+        }                                                                                                              \
+        m_current.member = value;                                                                                      \
+        settingsEdited();                                                                                              \
     }
 
 SETTER(ChargeLimit, chargeLimit, int)
@@ -432,29 +394,23 @@ SETTER(ClickForce, clickForce, const QString &)
 
 #undef SETTER
 
-void FrameworkKcm::clearError()
-{
-    setError(QString());
-}
+void FrameworkKcm::clearError() { setError(QString()); }
 
-void FrameworkKcm::setError(const QString &message)
-{
+void FrameworkKcm::setError(const QString &message) {
     if (m_errorMessage != message) {
         m_errorMessage = message;
         Q_EMIT errorMessageChanged();
     }
 }
 
-void FrameworkKcm::setBusy(bool busy)
-{
+void FrameworkKcm::setBusy(bool busy) {
     if (m_busy != busy) {
         m_busy = busy;
         Q_EMIT busyChanged();
     }
 }
 
-void FrameworkKcm::setDaemonAvailable(bool available)
-{
+void FrameworkKcm::setDaemonAvailable(bool available) {
     if (m_daemonAvailable != available) {
         m_daemonAvailable = available;
         Q_EMIT daemonAvailableChanged();

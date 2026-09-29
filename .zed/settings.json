@@ -1,0 +1,21 @@
+{
+  "format_on_save": "on",
+  "languages": {
+    "C++": {
+      "formatter": {
+        "external": {
+          "command": "clang-format",
+          "arguments": ["--assume-filename", "$ZED_FILE"],
+        },
+      },
+    },
+    "C": {
+      "formatter": {
+        "external": {
+          "command": "clang-format",
+          "arguments": ["--assume-filename", "$ZED_FILE"],
+        },
+      },
+    },
+  },
+}
