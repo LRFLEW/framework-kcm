@@ -1,145 +1,86 @@
 # Framework KCM
 
+Framework laptop settings in KDE System Settings: battery charge limits,
+fans and temperatures, fingerprint LED and haptic touchpad settings, and
+firmware and USB-C port information.
+
 | Battery | Fans & Thermals |
 |---|---|
 | ![Battery tab](docs/battery.png) | ![Fans & Thermals tab](docs/thermals.png) |
 | **Touchpad & LED** | **System** |
 | ![Touchpad & LED tab](docs/touchpad.png) | ![System tab](docs/system.png) |
 
-A KDE System Settings module for Framework laptops, built on
+## Features
+
+- **Battery:** set a charge limit, charge to 100% once with *Override Charge
+  Limit* (the limit comes back after the next restart), and slow down
+  charging to reduce heat and battery wear.
+- **Fans & Thermals:** live temperatures, fan speed and throttling status.
+  Leave the fans on automatic, or fix their speed.
+- **Touchpad & LED:** fingerprint reader LED brightness, and haptic touchpad
+  feedback strength and click force.
+- **System:** model, BIOS, EC and PD controller firmware versions, camera and
+  microphone privacy switches, and what's connected to each USB-C port.
+
+It's built on Framework's own
 [`framework_lib`](https://github.com/FrameworkComputer/framework-system).
-Developed against the Laptop 13 Pro (Intel Core Ultra Series 3).
 
-- **Battery**: charge limit (temporary, see below), one-time override to 100%, and charge rate limit
-- **Fans & Thermals**: temperatures, fan RPM, throttling, manual/automatic fan control
-- **Touchpad & LED**: fingerprint LED, haptic touchpad intensity and click force
-- **System**: model, BIOS/EC/PD firmware versions, privacy switches, USB-C port state
+## Supported hardware
 
-## How it fits together
+Developed and tested on the **Framework Laptop 13 Pro (Intel Core Ultra
+Series 3)**. Other Framework laptops use the same embedded controller
+interface, so most features should work there too, but they haven't been
+tested.
 
-```
-System Settings ──D-Bus (system bus)──▶ framework-kcmd (root) ──framework_lib──▶ EC / HID / SMBIOS
-  kcm_framework (C++/QML)                   polkit checks on writes
-```
+Requires KDE Plasma 6.
 
-Talking to the EC needs root, and a KCM runs as your user, so the hardware
-access lives in `daemon/`. That's a small Rust service that links
-`framework_lib` directly and serves `io.github.frameworkkcm.Daemon1` on the
-system bus. Anyone can read. Writes go through polkit:
+## Install
 
-| Action                             | Default for the active local user          |
-|------------------------------------|--------------------------------------------|
-| `io.github.frameworkkcm.battery`   | allowed                                    |
-| `io.github.frameworkkcm.fan`       | admin password, remembered for the session |
-| `io.github.frameworkkcm.input`     | allowed (touchpad, fingerprint LED)        |
+Download the package for your distribution from the
+[latest release](https://github.com/flamingspaz/framework-kcm/releases/latest).
 
-Some settings can't be read back from the hardware: touchpad haptics, click
-force and the charge rate limit. The daemon saves these to
-`/var/lib/framework-kcmd/state.json` and re-applies them when it starts.
-If you set the fans to a fixed speed, they go back to automatic when the
-daemon exits.
-
-**Override Charge Limit** raises the limit to 100% until the next boot. The
-daemon records the old limit together with the kernel's boot ID. When it
-starts in a new boot, it puts the old limit back. Restarting the daemon
-within the same boot keeps the override. Choosing a new charge limit, or
-pressing *Restore Now*, ends it early.
-
-## Build & install
-
-Requirements: Rust (cargo), CMake, ECM, Qt 6, KF6 (KCMUtils, I18n, CoreAddons), Kirigami, and hidapi/libudev.
-
-With Docker (no Rust toolchain needed on the host):
+**Arch Linux**
 
 ```sh
-./build.sh                          # extra args go to cmake, e.g. ./build.sh -DBUILD_DAEMON=OFF
-sudo cmake --install build
-```
-
-Or natively:
-
-```sh
-sudo pacman -S --needed rust cmake extra-cmake-modules kcmutils ki18n kirigami hidapi
-
-cmake -B build -DCMAKE_INSTALL_PREFIX=/usr
-cmake --build build
-sudo cmake --install build
-```
-
-Then, either way:
-
-```sh
-sudo systemctl daemon-reload
-sudo systemctl reload dbus          # pick up the new bus policy
+sudo pacman -U framework-kcm-*.pkg.tar.zst
 sudo systemctl enable --now framework-kcmd
-
-kcmshell6 kcm_framework             # or System Settings → System → Framework Laptop
 ```
 
-To build only the KCM (for example, to iterate on the QML): `-DBUILD_DAEMON=OFF`.
-
-## Packages & releases
-
-GitHub Actions (`.github/workflows/build.yml`) builds everything on every push
-and pull request. Pushing a `v*` tag also builds packages and attaches them
-to a GitHub release:
-
-| Distribution | Package | Built with |
-|---|---|---|
-| Arch Linux | `framework-kcm-<version>-1-x86_64.pkg.tar.zst` | `packaging/arch/PKGBUILD` and `makepkg` |
-| Ubuntu 26.04 | `framework-kcm_<version>_amd64.deb` | CPack (`packaging/cpack.cmake`) |
+**Ubuntu 26.04**
 
 ```sh
-sudo pacman -U framework-kcm-*.pkg.tar.zst   # Arch; then: sudo systemctl enable --now framework-kcmd
-sudo apt install ./framework-kcm_*.deb       # Ubuntu; enables and starts the service
+sudo apt install ./framework-kcm_*.deb
 ```
 
-To release, bump the version in `CMakeLists.txt` (`project(... VERSION ...)`)
-and `daemon/Cargo.toml`, commit, then tag it:
+The Ubuntu package enables the background service for you.
 
-```sh
-git tag v0.2.0 && git push origin v0.2.0
-```
+Then open **System Settings → System → Framework Laptop**, or run
+`kcmshell6 kcm_framework`.
 
-The workflow refuses to package a tag that doesn't match both versions.
+The `framework-kcmd` service starts on its own when you open the settings
+page. Enabling it also starts it at boot, so settings the hardware forgets
+(touchpad feedback, click force, charge speed) are applied again after a
+restart.
 
-## Poking the daemon directly
+To uninstall, run `sudo pacman -R framework-kcm` or `sudo apt remove framework-kcm`.
 
-```sh
-busctl introspect io.github.frameworkkcm.Daemon1 /io/github/frameworkkcm/Daemon1
-busctl call io.github.frameworkkcm.Daemon1 /io/github/frameworkkcm/Daemon1 \
-    io.github.frameworkkcm.Daemon1 GetPower
-busctl call io.github.frameworkkcm.Daemon1 /io/github/frameworkkcm/Daemon1 \
-    io.github.frameworkkcm.Daemon1 SetChargeLimit i 80
-journalctl -u framework-kcmd
-```
+## Permissions
 
-Run it in the foreground with more logging:
-`sudo RUST_LOG=debug build/cargo/release/framework-kcmd` (stop the service first).
+Changing hardware settings needs root, so a small system service does it on
+the settings page's behalf. Whether you're asked for a password:
 
-## Translations
+| Setting | Password? |
+|---|---|
+| Battery charging | No |
+| Touchpad and fingerprint LED | No |
+| Fan control | Yes, then remembered for a few minutes |
 
-The KCM follows the language set in System Settings. It ships Dutch,
-German, Spanish and French translations (`po/<lang>/kcm_framework.po`),
-which are **machine translations that still need review by native
-speakers**. The System Settings entry and the polkit password prompts are
-translated too, in `kcm/kcm_framework.json` and
-`data/io.github.frameworkkcm.policy`.
+Fan control asks because a fixed fan speed can let the laptop run hot. The
+embedded controller still shuts the laptop down before it overheats, and the
+fans go back to automatic when the service stops or the laptop restarts.
 
-The daemon sends no display text, only stable keys such as
-`"location": "near-cpu"` or `"role": "sink-not-charging"`, and the QML turns
-them into translated strings. A root system service can't know the user's
-language.
-
-After changing strings in the KCM, refresh the template and merge it into
-every language:
-
-```sh
-po/update.sh        # needs gettext
-```
-
-To add a language, copy `po/kcm_framework.pot` to `po/<lang>/kcm_framework.po`
-and translate it. `ki18n_install` picks it up on the next build.
+When you're logged in remotely (over SSH, for example), every change asks
+for an administrator password.
 
 ## Things to know
 
@@ -152,3 +93,30 @@ and translate it. `ki18n_install` picks it up on the next build.
   on the 13 Pro Input Cover.
 - Keyboard backlight is left to Plasma, which drives it through `cros_kbd_led_backlight`.
 - USB-C port names follow `framework_tool --pdports`.
+
+## Languages
+
+The module follows your System Settings language. It's available in
+English, Dutch, German, Spanish and French. The non-English translations
+were machine-generated and haven't been reviewed by native speakers yet,
+so corrections are welcome. See [docs/translations.md](docs/translations.md).
+
+## Documentation
+
+- [How it works](docs/architecture.md): the settings page, the system
+  service, and its D-Bus API
+- [Building from source](docs/building.md), and debugging the service
+- [Releasing](docs/releasing.md): CI, packaging and cutting a release
+- [Translations](docs/translations.md): updating or adding a language
+
+## License
+
+Framework KCM is free software, licensed under the GNU General Public
+License version 3 or (at your option) any later version. See
+[LICENSE](LICENSE).
+
+It uses [`framework_lib`](https://github.com/FrameworkComputer/framework-system),
+which is BSD-3-Clause licensed. The icon is the cog from the Framework
+Computer logo. The logo itself is in the public domain, but "Framework" is a
+trademark of Framework Computer Inc., and this project isn't affiliated with
+them.
