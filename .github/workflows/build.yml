@@ -31,10 +31,10 @@ jobs:
           # shellcheck disable=SC2086 # split the package list on purpose
           pacman -Syu --noconfirm --needed $ARCH_DEPS
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Cache cargo downloads
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             /github/home/.cargo/registry
@@ -67,7 +67,7 @@ jobs:
     outputs:
       version: ${{ steps.check.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: check
         run: |
           tag="${GITHUB_REF_NAME#v}"
@@ -92,7 +92,7 @@ jobs:
           # shellcheck disable=SC2086 # split the package list on purpose
           pacman -Syu --noconfirm --needed $ARCH_DEPS
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Prepare sources
         run: |
@@ -112,7 +112,7 @@ jobs:
           chown -R builder /tmp/pkg
           su builder -c 'cd /tmp/pkg && makepkg --noconfirm'
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: arch-package
           # Leave out the -debug split package
@@ -135,7 +135,7 @@ jobs:
           # shellcheck disable=SC2086 # split the package list on purpose
           apt-get install -y --no-install-recommends $UBUNTU_DEPS
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build
         run: |
@@ -145,7 +145,7 @@ jobs:
       - name: Build package
         run: cd build && cpack -G DEB
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ubuntu-package
           path: build/framework-kcm_*.deb
@@ -158,12 +158,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: dist
           merge-multiple: true
 
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           files: dist/*
           generate_release_notes: true
