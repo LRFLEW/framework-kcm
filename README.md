@@ -4,11 +4,11 @@ Framework laptop settings in KDE System Settings: battery charge limits,
 fans and temperatures, fingerprint LED and haptic touchpad settings, and
 firmware and USB-C port information.
 
-| Battery | Fans & Thermals |
-|---|---|
-| ![Battery tab](docs/battery.png) | ![Fans & Thermals tab](docs/thermals.png) |
-| **Touchpad & LED** | **System** |
-| ![Touchpad & LED tab](docs/touchpad.png) | ![System tab](docs/system.png) |
+| Battery                                  | Fans & Thermals                           |
+|------------------------------------------|-------------------------------------------|
+| ![Battery tab](docs/battery.png)         | ![Fans & Thermals tab](docs/thermals.png) |
+| **Touchpad & LED**                       | **System**                                |
+| ![Touchpad & LED tab](docs/touchpad.png) | ![System tab](docs/system.png)            |
 
 ## Features
 
@@ -69,11 +69,11 @@ To uninstall, run `sudo pacman -R framework-kcm` or `sudo apt remove framework-k
 Changing hardware settings needs root, so a small system service does it on
 the settings page's behalf. Whether you're asked for a password:
 
-| Setting | Password? |
-|---|---|
-| Battery charging | No |
-| Touchpad and fingerprint LED | No |
-| Fan control | Yes, then remembered for a few minutes |
+| Setting                      | Password?                              |
+|------------------------------|----------------------------------------|
+| Battery charging             | No                                     |
+| Touchpad and fingerprint LED | No                                     |
+| Fan control                  | Yes, then remembered for a few minutes |
 
 Fan control asks because a fixed fan speed can let the laptop run hot. The
 embedded controller still shuts the laptop down before it overheats, and the

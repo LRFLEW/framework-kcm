@@ -105,8 +105,7 @@ FrameworkKcm::FrameworkKcm(QObject *parent, const KPluginMetaData &data) : KQuic
     connect(&m_liveTimer, &QTimer::timeout, this, &FrameworkKcm::refreshLive);
 }
 
-void FrameworkKcm::call(const QString &method, const QVariantList &args, ReplyHandler onReply, ErrorHandler onError,
-                        int timeout) {
+void FrameworkKcm::call(const QString &method, const QVariantList &args, const ReplyHandler& onReply, const ErrorHandler& onError, const int timeout) {
     auto msg = QDBusMessage::createMethodCall(s_service, s_path, s_interface, method);
     msg.setArguments(args);
     msg.setInteractiveAuthorizationAllowed(true);
@@ -287,7 +286,7 @@ void FrameworkKcm::save() {
         m_writeQueue.append({u"SetChargeLimit"_s, {c.chargeLimit}});
     }
     if (c.chargeRateLimit != s.chargeRateLimit || c.chargeRateSoc != s.chargeRateSoc) {
-        m_writeQueue.append({u"SetChargeRateLimit"_s, {c.chargeRateLimit, double(c.chargeRateSoc)}});
+        m_writeQueue.append({u"SetChargeRateLimit"_s, {c.chargeRateLimit, static_cast<double>(c.chargeRateSoc)}});
     }
     if (const auto fan = fanWrite(c); fan != fanWrite(s)) {
         m_writeQueue.append(fan);

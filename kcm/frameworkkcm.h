@@ -64,29 +64,29 @@ public:
     void save() override;
     void defaults() override;
 
-    bool daemonAvailable() const { return m_daemonAvailable; }
-    bool busy() const { return m_busy; }
-    QString errorMessage() const { return m_errorMessage; }
-    QString liveData() const { return m_liveData; }
+    [[nodiscard]] bool daemonAvailable() const { return m_daemonAvailable; }
+    [[nodiscard]] bool busy() const { return m_busy; }
+    [[nodiscard]] QString errorMessage() const { return m_errorMessage; }
+    [[nodiscard]] QString liveData() const { return m_liveData; }
     void setLiveData(const QString &liveData);
 
-    QVariantMap systemInfo() const { return m_systemInfo; }
-    QVariantList sensors() const { return m_sensors; }
-    QVariantList fans() const { return m_fans; }
-    QVariantMap throttle() const { return m_throttle; }
-    QVariantList ports() const { return m_ports; }
-    bool fpLedSupported() const { return m_fpLedSupported; }
-    bool chargeLimitOverridden() const { return m_chargeLimitOverridden; }
+    [[nodiscard]] QVariantMap systemInfo() const { return m_systemInfo; }
+    [[nodiscard]] QVariantList sensors() const { return m_sensors; }
+    [[nodiscard]] QVariantList fans() const { return m_fans; }
+    [[nodiscard]] QVariantMap throttle() const { return m_throttle; }
+    [[nodiscard]] QVariantList ports() const { return m_ports; }
+    [[nodiscard]] bool fpLedSupported() const { return m_fpLedSupported; }
+    [[nodiscard]] bool chargeLimitOverridden() const { return m_chargeLimitOverridden; }
 
-    int chargeLimit() const { return m_current.chargeLimit; }
-    double chargeRateLimit() const { return m_current.chargeRateLimit; }
-    int chargeRateSoc() const { return m_current.chargeRateSoc; }
-    QString fanMode() const { return m_current.fanMode; }
-    int fanDuty() const { return m_current.fanDuty; }
-    int fanRpm() const { return m_current.fanRpm; }
-    QString fpLedLevel() const { return m_current.fpLedLevel; }
-    int hapticIntensity() const { return m_current.hapticIntensity; }
-    QString clickForce() const { return m_current.clickForce; }
+    [[nodiscard]] int chargeLimit() const { return m_current.chargeLimit; }
+    [[nodiscard]] double chargeRateLimit() const { return m_current.chargeRateLimit; }
+    [[nodiscard]] int chargeRateSoc() const { return m_current.chargeRateSoc; }
+    [[nodiscard]] QString fanMode() const { return m_current.fanMode; }
+    [[nodiscard]] int fanDuty() const { return m_current.fanDuty; }
+    [[nodiscard]] int fanRpm() const { return m_current.fanRpm; }
+    [[nodiscard]] QString fpLedLevel() const { return m_current.fpLedLevel; }
+    [[nodiscard]] int hapticIntensity() const { return m_current.hapticIntensity; }
+    [[nodiscard]] QString clickForce() const { return m_current.clickForce; }
 
     void setChargeLimit(int value);
     void setChargeRateLimit(double value);
@@ -119,7 +119,7 @@ private:
     using ReplyHandler = std::function<void(const QDBusMessage &)>;
     using ErrorHandler = std::function<void(const QDBusError &)>;
 
-    void call(const QString &method, const QVariantList &args, ReplyHandler onReply, ErrorHandler onError = {},
+    void call(const QString &method, const QVariantList &args, const ReplyHandler& onReply, const ErrorHandler& onError = {},
               int timeout = -1);
     void refreshLive();
     void loadSettings();
