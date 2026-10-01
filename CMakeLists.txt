@@ -21,7 +21,10 @@ find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS CoreAddons I18n KCMUtils)
 
 option(BUILD_DAEMON "Build the framework-kcmd system service with cargo" ON)
 
-set(DAEMON_PATH "${KDE_INSTALL_FULL_LIBEXECDIR}/framework-kcmd")
+set(DAEMON_PATH "${KDE_INSTALL_FULL_LIBEXECDIR}/framework-kcmd" CACHE FILEPATH "Path to the Daemon build to use if BUILD_DAEMON=OFF")
+if(BUILD_DAEMON AND NOT DAEMON_PATH STREQUAL "${KDE_INSTALL_FULL_LIBEXECDIR}/framework-kcmd")
+    message(FATAL_ERROR "Do not modify DAEMON_PATH if BUILD_DAEMON=ON")
+endif()
 
 if(BUILD_DAEMON)
     find_program(CARGO cargo REQUIRED)
