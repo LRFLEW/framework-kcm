@@ -6,17 +6,31 @@ import QtQuick.Layouts
 
 ApplicationWindow {
     id: window
-    width: 760
-    height: 720
-    minimumWidth: 560
-    minimumHeight: 520
+    width: 800
+    height: 760
+    minimumWidth: 600
+    minimumHeight: 560
     visible: true
     title: qsTr("Framework Settings")
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 16
-        spacing: 12
+        anchors.margins: 24
+        spacing: 16
+
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: 2
+            Label {
+                text: qsTr("Framework Settings")
+                font.pixelSize: 24
+                font.weight: Font.DemiBold
+            }
+            Label {
+                text: qsTr("Manage charging, cooling, and input hardware.")
+                color: palette.mid
+            }
+        }
 
         Label {
             Layout.fillWidth: true
@@ -36,10 +50,11 @@ ApplicationWindow {
         TabBar {
             id: tabs
             Layout.fillWidth: true
-            TabButton { text: qsTr("Battery") }
-            TabButton { text: qsTr("Fans & Thermals") }
-            TabButton { text: qsTr("Touchpad & LED") }
-            TabButton { text: qsTr("System") }
+            Layout.preferredWidth: parent.width
+            TabButton { width: (window.width - 48) / 4; text: qsTr("Battery") }
+            TabButton { width: (window.width - 48) / 4; text: qsTr("Fans and Thermals") }
+            TabButton { width: (window.width - 48) / 4; text: qsTr("Touchpad and LED") }
+            TabButton { width: (window.width - 48) / 4; text: qsTr("System") }
         }
 
         StackLayout {
@@ -50,9 +65,11 @@ ApplicationWindow {
 
             ScrollView {
                 clip: true
+                contentWidth: availableWidth
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
                 ColumnLayout {
                     width: parent.width
-                    spacing: 12
+                    spacing: 16
                     GroupBox {
                         Layout.fillWidth: true
                         title: qsTr("Charging")
@@ -62,6 +79,7 @@ ApplicationWindow {
                                 Label { Layout.fillWidth: true; text: qsTr("Charge limit") }
                                 Slider {
                                     id: chargeLimitSlider
+                                    Layout.fillWidth: true
                                     from: 25; to: 100; stepSize: 5; snapMode: Slider.SnapAlways
                                     value: kcm.chargeLimit
                                     onMoved: kcm.chargeLimit = value
@@ -146,9 +164,11 @@ ApplicationWindow {
 
             ScrollView {
                 clip: true
+                contentWidth: availableWidth
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
                 ColumnLayout {
                     width: parent.width
-                    spacing: 12
+                    spacing: 16
                     GroupBox {
                         Layout.fillWidth: true
                         title: qsTr("Temperatures")
@@ -199,6 +219,7 @@ ApplicationWindow {
                                 Label { Layout.fillWidth: true; text: qsTr("Fan duty") }
                                 Slider {
                                     id: dutySlider
+                                    Layout.fillWidth: true
                                     from: 0; to: 100; stepSize: 5; snapMode: Slider.SnapAlways
                                     value: kcm.fanDuty
                                     onMoved: kcm.fanDuty = value
@@ -229,9 +250,11 @@ ApplicationWindow {
 
             ScrollView {
                 clip: true
+                contentWidth: availableWidth
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
                 ColumnLayout {
                     width: parent.width
-                    spacing: 12
+                    spacing: 16
                     GroupBox {
                         Layout.fillWidth: true
                         title: qsTr("Fingerprint reader LED")
@@ -279,27 +302,39 @@ ApplicationWindow {
 
             ScrollView {
                 clip: true
+                contentWidth: availableWidth
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
                 ColumnLayout {
                     width: parent.width
-                    spacing: 12
+                    spacing: 16
                     GroupBox {
                         Layout.fillWidth: true
                         title: qsTr("Device and firmware")
                         GridLayout {
-                            anchors.fill: parent
+                            Layout.fillWidth: true
                             columns: 2
-                            Label { text: qsTr("Model") }
-                            Label { text: kcm.systemInfo.product || qsTr("Unknown") }
-                            Label { text: qsTr("BIOS") }
-                            Label { text: kcm.systemInfo.biosVersion || qsTr("Unknown") }
-                            Label { text: qsTr("EC") }
-                            Label { text: kcm.systemInfo.ecVersion || qsTr("Unknown") }
-                            Label { text: qsTr("Service") }
-                            Label { text: kcm.systemInfo.daemonVersion || qsTr("Unknown") }
-                            Label { text: qsTr("Camera") }
-                            Label { text: kcm.systemInfo.privacyKnown ? (kcm.systemInfo.cameraEnabled ? qsTr("Enabled") : qsTr("Disabled by privacy switch")) : qsTr("Unknown") }
-                            Label { text: qsTr("Microphone") }
-                            Label { text: kcm.systemInfo.privacyKnown ? (kcm.systemInfo.micEnabled ? qsTr("Enabled") : qsTr("Disabled by privacy switch")) : qsTr("Unknown") }
+                            columnSpacing: 24
+                            rowSpacing: 12
+                            Label { text: qsTr("Model"); color: palette.mid }
+                            Label { Layout.fillWidth: true; text: kcm.systemInfo.product || qsTr("Unknown") }
+                            Label { text: qsTr("BIOS"); color: palette.mid }
+                            Label { Layout.fillWidth: true; text: kcm.systemInfo.biosVersion || qsTr("Unknown") }
+                            Label { text: qsTr("EC"); color: palette.mid }
+                            Label { Layout.fillWidth: true; text: kcm.systemInfo.ecVersion || qsTr("Unknown") }
+                            Label { text: qsTr("Service"); color: palette.mid }
+                            Label { Layout.fillWidth: true; text: kcm.systemInfo.daemonVersion || qsTr("Unknown") }
+                            Label { text: qsTr("Camera"); color: palette.mid }
+                            Label {
+                                Layout.fillWidth: true
+                                wrapMode: Text.Wrap
+                                text: kcm.systemInfo.privacyKnown ? (kcm.systemInfo.cameraEnabled ? qsTr("Enabled") : qsTr("Disabled by privacy switch")) : qsTr("Unknown")
+                            }
+                            Label { text: qsTr("Microphone"); color: palette.mid }
+                            Label {
+                                Layout.fillWidth: true
+                                wrapMode: Text.Wrap
+                                text: kcm.systemInfo.privacyKnown ? (kcm.systemInfo.micEnabled ? qsTr("Enabled") : qsTr("Disabled by privacy switch")) : qsTr("Unknown")
+                            }
                         }
                     }
                     GroupBox {
@@ -314,6 +349,8 @@ ApplicationWindow {
                                     Layout.fillWidth: true
                                     Label { Layout.fillWidth: true; text: modelData.position || qsTr("Port") }
                                     Label {
+                                        Layout.fillWidth: true
+                                        horizontalAlignment: Text.AlignRight
                                         text: {
                                             const p = modelData;
                                             if (!p.ok) return qsTr("Unavailable");
@@ -331,10 +368,18 @@ ApplicationWindow {
             }
         }
 
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: palette.mid
+            opacity: 0.25
+        }
+
         RowLayout {
             Layout.fillWidth: true
             Label {
                 Layout.fillWidth: true
+                color: kcm.busy ? palette.mid : palette.text
                 text: kcm.busy ? qsTr("Applying settings…") : kcm.needsSave ? qsTr("Changes not applied") : ""
             }
             Button {
@@ -345,6 +390,7 @@ ApplicationWindow {
             Button {
                 text: qsTr("Apply")
                 enabled: kcm.needsSave && !kcm.busy && kcm.daemonAvailable
+                highlighted: true
                 onClicked: kcm.save()
             }
         }
