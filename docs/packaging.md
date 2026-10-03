@@ -31,8 +31,10 @@ The versioned spec uses the `v%{version}` source archive. Both specs produce
 `framework-settings` as a meta-package, with separate GUI, KCM, and daemon
 packages; installing `framework-gui` alone avoids the KDE dependencies. They
 use Fedora's KF6 RPM macros (`%cmake_kf6`, `%cmake_build`, and
-`%cmake_install`) and install the plugin under `%{_kf6_qtplugindir}`. The CI
-workflow for the Git RPM is `.github/workflows/package-git.yml`.
+`%cmake_install`) and install the plugin under `%{_kf6_qtplugindir}`. They set
+`INSTALL_PACKAGE_DOCS=OFF` so RPM's `%license` and `%doc` macros own the docs
+and license files. The CI workflow for the Git RPM is
+`.github/workflows/package-git.yml`.
 
 ## Arch Linux
 
