@@ -88,3 +88,7 @@ target
 **/*.rs.bk
 
 anda-build/
+
+# Nix build outputs
+/result
+/result-*
