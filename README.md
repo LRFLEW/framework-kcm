@@ -5,15 +5,15 @@ fans and temperatures, fingerprint LED and haptic touchpad settings, and
 firmware and USB-C port information.
 
 | Battery                                  | Fans & Thermals                           |
-|------------------------------------------|-------------------------------------------|
+| ---------------------------------------- | ----------------------------------------- |
 | ![Battery tab](docs/battery.png)         | ![Fans & Thermals tab](docs/thermals.png) |
 | **Touchpad & LED**                       | **System**                                |
 | ![Touchpad & LED tab](docs/touchpad.png) | ![System tab](docs/system.png)            |
 
 ## Features
 
-- **Battery:** set a charge limit, charge to 100% once with *Override Charge
-  Limit* (the limit comes back after the next restart), and slow down
+- **Battery:** set a charge limit, charge to 100% once with _Override Charge
+  Limit_ (the limit comes back after the next restart), and slow down
   charging to reduce heat and battery wear.
 - **Fans & Thermals:** live temperatures, fan speed and throttling status.
   Leave the fans on automatic, or fix their speed.
@@ -70,7 +70,7 @@ Changing hardware settings needs root, so a small system service does it on
 the settings page's behalf. Whether you're asked for a password:
 
 | Setting                      | Password?                              |
-|------------------------------|----------------------------------------|
+| ---------------------------- | -------------------------------------- |
 | Battery charging             | No                                     |
 | Touchpad and fingerprint LED | No                                     |
 | Fan control                  | Yes, then remembered for a few minutes |
@@ -106,7 +106,9 @@ so corrections are welcome. See [docs/translations.md](docs/translations.md).
 - [How it works](docs/architecture.md): the settings page, the system
   service, and its D-Bus API
 - [Building from source](docs/building.md), and debugging the service
-- [Releasing](docs/releasing.md): CI, packaging and cutting a release
+- [Packaging](docs/packaging.md): local RPM builds with Anda and distro
+  packaging workflows
+- [Releasing](docs/releasing.md): CI and cutting a release
 - [Translations](docs/translations.md): updating or adding a language
 
 ## License

@@ -1,54 +1,111 @@
 # Building from source
 
-Requirements: Rust (cargo), CMake, extra-cmake-modules, Qt 6, KF6
-(KCMUtils, I18n, CoreAddons), Kirigami, gettext and libudev.
+Framework KCM consists of a KDE/Qt 6 System Settings module and a Rust
+system service. The default build builds both; set `BUILD_DAEMON=OFF` to work
+on the UI without building the service.
 
-## With Docker
+## Requirements
 
-No Rust toolchain needed on the host. The image is Arch-based, so the
-result links against the same libraries as an up-to-date Arch system.
+- CMake 3.22 or newer and a C++20 compiler
+- Extra CMake Modules, Qt 6.6 or newer (Core, DBus, Qml and Quick), and KF6
+  (CoreAddons, I18n and KCMUtils)
+- Rust and Cargo (the service is built with `cargo build --release --locked`)
+- The native development libraries used by `framework_lib` (including hidapi,
+  libusb and systemd)
 
-```sh
-./build.sh                          # extra args go to cmake, e.g. ./build.sh -DBUILD_DAEMON=OFF
-sudo cmake --install build
-```
-
-The project is mounted at the same path inside the container, so
-`cmake --install` works from the host afterwards.
-
-## Natively (Arch Linux)
+On Fedora, install the build dependencies with:
 
 ```sh
-sudo pacman -S --needed rust cmake extra-cmake-modules kcmutils ki18n kirigami
-
-cmake -B build -DCMAKE_INSTALL_PREFIX=/usr
-cmake --build build
-sudo cmake --install build
+sudo dnf install cmake extra-cmake-modules gcc-c++ cargo rust git pkgconf-pkg-config \
+  qt6-qtbase-devel qt6-qtdeclarative-devel \
+  kf6-kcmutils-devel kf6-kcoreaddons-devel kf6-ki18n-devel \
+  hidapi-devel libusb1-devel systemd-devel
 ```
 
-On Debian or Ubuntu, add `-DKDE_INSTALL_USE_QT_SYS_PATHS=ON` so the plugin
-lands in the multiarch Qt directory.
+On Arch Linux:
 
-## After installing
+```sh
+sudo pacman -S --needed cmake extra-cmake-modules gcc rust git \
+  qt6-base qt6-declarative kcmutils kcoreaddons ki18n kirigami \
+  hidapi libusb systemd-libs
+```
+
+## Build Fedora RPMs locally with Anda
+
+From the repository root, run the Git RPM build with Anda:
+
+```sh
+anda build -c terra-44-x86_64 kcm-git
+```
+
+The `kcm-git` project in `anda.hcl` uses
+`packaging/fedora/framework-kcm-git.spec` and packages the current Git source.
+For the versioned RPM spec, use `anda build -c terra-44-x86_64 kcm`; that spec
+builds the tagged source matching its `Version`. See
+[Packaging](packaging.md) for the distro packaging overview.
+
+The first daemon build downloads Rust crates and the `framework_lib` Git
+repository, so it needs network access. Subsequent builds use Cargo's cache.
+
+## Native build with CMake
+
+Run these commands from the repository root. They use CMake directly; no
+project-specific build wrapper is required.
+
+```sh
+cmake -S . -B build \
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+  -DCMAKE_INSTALL_PREFIX=/usr \
+  -DKDE_INSTALL_USE_QT_SYS_PATHS=ON
+cmake --build build --parallel
+```
+
+To install into a temporary staging directory instead of the live system:
+
+```sh
+DESTDIR="$PWD/stage" cmake --install build
+```
+
+The staged files are under `stage/usr/`. To install directly to the system,
+use `sudo cmake --install build` instead. If you install directly, reload the
+service and D-Bus configuration and enable the daemon:
 
 ```sh
 sudo systemctl daemon-reload
-sudo systemctl reload dbus          # pick up the new bus policy
+sudo systemctl reload dbus
 sudo systemctl enable --now framework-kcmd
-
-kcmshell6 kcm_framework             # or System Settings → System → Framework Laptop
 ```
 
-If you later switch to the release packages, remove the files listed in
-`build/install_manifest.txt` first, or the package manager will report
-conflicting files.
+`KDE_INSTALL_USE_QT_SYS_PATHS=ON` installs the module under Qt's plugin
+path, which is where Plasma 6 searches for KCMs. On Fedora this should place
+the plugin at `/usr/lib64/qt6/plugins/plasma/kcms/systemsettings/kcm_framework.so`.
+
+For UI-only work, configure with `-DBUILD_DAEMON=OFF`; that build will not
+produce or install `framework-kcmd`, so skip the service commands above.
+
+## With Docker
+
+`build.sh` is an optional wrapper that builds inside an Arch-based container,
+so a host Rust toolchain is not needed. It uses the same CMake configure and
+build steps and leaves the build directory mounted at the same path:
+
+```sh
+./build.sh
+sudo cmake --install build
+```
+
+Pass CMake options through to the script, for example `./build.sh
+-DBUILD_DAEMON=OFF`. The resulting binaries link against the libraries in the
+container, so use a container matching the target distribution for packages
+intended for distribution.
 
 ## Useful options
 
-- `-DBUILD_DAEMON=OFF`: build only the KCM, for example to work on the QML.
-- The daemon is built with `cargo build --release --locked`, so after
-  changing Rust dependencies run `cargo update` in `daemon/` to refresh
-  `Cargo.lock`.
+- `-DBUILD_DAEMON=OFF`: build only the KCM, for example while working on QML.
+- `-DCMAKE_BUILD_TYPE=Debug`: make a debug build; `Release` or
+  `RelWithDebInfo` are suitable for packaging.
+- The daemon uses `cargo build --release --locked`. After changing Rust
+  dependencies, run `cargo update` in `daemon/` to refresh `Cargo.lock`.
 
 ## Debugging the service
 
