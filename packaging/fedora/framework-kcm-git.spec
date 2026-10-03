@@ -1,11 +1,13 @@
+%global _version 0.1.1
+
 Name:           framework-settings
-Version:        0.1.1
+Version:        %{_version}^%{autogitversion}
 Release:        1%{?dist}
-Summary:        Framework laptop settings and hardware service
+Summary:        Framework laptop settings and hardware service (git)
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/flamingspaz/framework-kcm
-Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
+Source0:        %{url}/archive/%{autogitcommit}.tar.gz
 
 BuildRequires:  cmake >= 3.22
 BuildRequires:  extra-cmake-modules
@@ -71,10 +73,10 @@ System service that provides privileged hardware access for the Framework
 laptop settings interfaces.
 
 %prep
-%autosetup -n framework-kcm-%{version}
+%autosetup -n framework-kcm-%{autogitcommit}
 
 %conf
-%cmake_kf6
+%cmake_kf6 -DINSTALL_PACKAGE_DOCS=OFF
 
 %build
 %cmake_build

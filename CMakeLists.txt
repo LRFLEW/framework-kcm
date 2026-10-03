@@ -7,6 +7,7 @@ set(KF_MIN_VERSION "6.0.0")
 option(BUILD_KCM "Build the KDE System Settings module" ON)
 option(BUILD_GUI "Build the standalone Qt settings application" ON)
 option(BUILD_DAEMON "Build the framework-kcmd system service with cargo" ON)
+option(INSTALL_PACKAGE_DOCS "Install the license and README through CMake" ON)
 
 if(BUILD_KCM)
   find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
@@ -82,8 +83,10 @@ if(BUILD_GUI)
           RENAME framework-gui.svg COMPONENT gui)
 endif()
 
-install(FILES LICENSE README.md
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/doc/framework-settings COMPONENT meta)
+if(INSTALL_PACKAGE_DOCS)
+  install(FILES LICENSE README.md
+          DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/doc/framework-settings COMPONENT meta)
+endif()
 
 if(BUILD_KCM)
   set(_install_default_component "${CMAKE_INSTALL_DEFAULT_COMPONENT_NAME}")
