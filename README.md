@@ -54,6 +54,14 @@ sudo apt install ./framework-kcm_*.deb
 
 The Ubuntu package enables the background service for you.
 
+**Fedora**
+
+`framework-kcm` is available in [Terra](https://terrapkg.com).
+
+```sh
+sudo dnf install framework-kcm
+```
+
 Then open **System Settings → System → Framework Laptop**, or run
 `kcmshell6 kcm_framework`.
 
