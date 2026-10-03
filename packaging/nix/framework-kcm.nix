@@ -30,6 +30,6 @@ pkgs.stdenv.mkDerivation {
   cmakeFlags = [
     "-DKDE_INSTALL_USE_QT_SYS_PATHS=ON"
     "-DBUILD_DAEMON=OFF"
-    "-DDAEMON_PATH=${framework-kcmd}/bin/framework-kcmd"
+    "-DDAEMON_PATH=${framework-kcmd}/bin/frameworkd"
   ];
 }
