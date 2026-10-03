@@ -39,6 +39,23 @@ Requires KDE Plasma 6.
 Download the package for your distribution from the
 [latest release](https://github.com/flamingspaz/framework-kcm/releases/latest).
 
+**Nix**
+
+Build from a checkout with:
+
+```sh
+nix build
+```
+
+The `framework-kcm` package includes the KCM and points its D-Bus and systemd
+service files at the daemon in the Nix store. Build the daemon by itself with:
+
+```sh
+nix build .#framework-kcmd
+```
+
+The underlying package expression is in `packaging/nix/package.nix`.
+
 **Arch Linux**
 
 ```sh
