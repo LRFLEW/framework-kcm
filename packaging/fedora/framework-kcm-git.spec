@@ -53,6 +53,7 @@ a companion system service for hardware access.
 
 %install
 %cmake_install
+%find_lang kcm_framework
 
 %post
 %systemd_post framework-kcmd.service
@@ -63,18 +64,17 @@ a companion system service for hardware access.
 %postun
 %systemd_postun_with_restart framework-kcmd.service
 
-%files
+%files -f kcm_framework.lang
 %license LICENSE
 %doc README.md
 %{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_framework.so
-%{_datadir}/applications/kcm_framework.desktop
+%{_appsdir}/kcm_framework.desktop
 %{_datadir}/dbus-1/system.d/io.github.frameworkkcm.Daemon1.conf
 %{_datadir}/dbus-1/system-services/io.github.frameworkkcm.Daemon1.service
 %{_unitdir}/framework-kcmd.service
 %{_libexecdir}/framework-kcmd
 %{_datadir}/polkit-1/actions/io.github.frameworkkcm.policy
-%{_datadir}/icons/hicolor/scalable/apps/framework-kcm.svg
-%{_datadir}/locale/*/LC_MESSAGES/kcm_framework.mo
+%{_scalableiconsdir}/framework-kcm.svg
 
 %changelog
 * Fri Oct 02 2026 Cypress Reed <cypress@fyralabs.com>
