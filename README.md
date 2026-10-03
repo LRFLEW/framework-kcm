@@ -48,14 +48,14 @@ nix build
 ```
 
 The `framework-kcm` package includes the KCM and points its D-Bus and systemd
-service files at the daemon in the Nix store. For compatibility, the daemon
-package remains available under the `framework-kcmd` Nix attribute:
+service files at the daemon in the Nix store. Build the daemon by itself with:
 
 ```sh
-nix build .#framework-kcmd
+nix build .#frameworkd
 ```
 
-The underlying package expression is in `packaging/nix/package.nix`.
+The underlying package expression is in `packaging/nix/package.nix`. The old
+`framework-kcmd` Nix attribute remains as a compatibility alias.
 
 **Arch Linux**
 
