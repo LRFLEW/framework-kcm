@@ -94,7 +94,7 @@ cmake --build build-qt --target framework-settings
 ./build-qt/gui/framework-settings
 ```
 
-The app uses the same `framework-kcmd` system service as the KCM, so that
+The app uses the same `frameworkd` system service as the KCM, so that
 service must be installed and running for hardware controls to work. With
 `BUILD_KCM=OFF`, CPack names the standalone package `framework-gui`.
 

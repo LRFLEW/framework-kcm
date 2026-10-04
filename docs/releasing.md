@@ -22,10 +22,10 @@ On a `v*` tag, the workflow:
 1. Checks that the tag matches both versions, and stops if it doesn't.
 2. Builds the packages in parallel:
 
-   | Distribution | Packages                                                                                     | Built with                              |
-   | ------------ | -------------------------------------------------------------------------------------------- | --------------------------------------- |
-   | Arch Linux   | `framework-settings`, `framework-gui`, `framework-kcm`, and `framework-kcmd`                 | `packaging/arch/PKGBUILD` and `makepkg` |
-   | Ubuntu 26.04 | `framework-settings`, `framework-gui`, `framework-kcm`, and `framework-kcmd` `.deb` packages | CPack (`packaging/cpack.cmake`)         |
+   | Distribution | Packages                                                                                 | Built with                              |
+   | ------------ | ---------------------------------------------------------------------------------------- | --------------------------------------- |
+   | Arch Linux   | `framework-settings`, `framework-gui`, `framework-kcm`, and `frameworkd`                 | `packaging/arch/PKGBUILD` and `makepkg` |
+   | Ubuntu 26.04 | `framework-settings`, `framework-gui`, `framework-kcm`, and `frameworkd` `.deb` packages | CPack (`packaging/cpack.cmake`)         |
 
 3. Creates a GitHub release for the tag, attaches all package files, and writes
    release notes from the commits since the last tag.
@@ -36,7 +36,7 @@ On a `v*` tag, the workflow:
   `pkgver` and `url`. LTO is turned off (`options=('!lto')`) because GCC LTO
   objects from hidapi's bundled C code can't be read by the linker cargo
   uses. The `-debug` split package isn't attached to releases.
-  `framework-kcmd.install` reminds the user to enable the service. The release
+  `frameworkd.install` reminds the user to enable the service. The release
   contains the `framework-settings` meta-package and separate GUI, KCM, and
   daemon packages.
 - **Ubuntu:** `dpkg-shlibdeps` works out the library dependencies. The QML

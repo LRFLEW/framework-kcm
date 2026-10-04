@@ -37,7 +37,7 @@ ApplicationWindow {
             visible: !kcm.daemonAvailable
             wrapMode: Text.Wrap
             color: "#b3261e"
-            text: qsTr("Cannot connect to the Framework hardware service (framework-kcmd). Make sure it is installed and running.")
+            text: qsTr("Cannot connect to the Framework hardware service (frameworkd). Make sure it is installed and running.")
         }
         Label {
             Layout.fillWidth: true

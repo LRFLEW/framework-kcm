@@ -99,7 +99,7 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           mkdir -p /tmp/pkg
           git archive --format=tar.gz --prefix="framework-settings-$VERSION/" -o "/tmp/pkg/framework-settings-$VERSION.tar.gz" HEAD
-          cp packaging/arch/PKGBUILD packaging/arch/framework-kcmd.install /tmp/pkg/
+          cp packaging/arch/PKGBUILD packaging/arch/frameworkd.install /tmp/pkg/
           sed -i \
             -e "s|^pkgver=.*|pkgver=$VERSION|" \
             -e "s|^url=.*|url='$GITHUB_SERVER_URL/$GITHUB_REPOSITORY'|" \
