@@ -1,5 +1,5 @@
 Name:           framework-settings
-Version:        0.1.1
+Version:        0.1.2
 Release:        1%{?dist}
 Summary:        Framework laptop settings and hardware service
 
