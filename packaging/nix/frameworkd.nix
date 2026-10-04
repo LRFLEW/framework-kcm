@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { }, version ? "0.1.1" }:
+{ pkgs ? import <nixpkgs> { }, version ? "0.1.2" }:
 
 pkgs.rustPlatform.buildRustPackage {
   pname = "frameworkd";

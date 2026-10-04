@@ -1,4 +1,4 @@
-%global _version 0.1.1
+%global _version 0.1.2
 
 Name:           framework-kcm
 Version:        %{_version}^%{autogitversion}

@@ -1,6 +1,6 @@
 [package]
 name = "frameworkd"
-version = "0.1.1"
+version = "0.1.2"
 description = "System D-Bus service exposing Framework Laptop EC controls to the Framework KCM"
 edition = "2021"
 license = "GPL-3.0-or-later"
