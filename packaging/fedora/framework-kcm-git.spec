@@ -30,7 +30,7 @@ BuildRequires:  systemd-rpm-macros
 
 Requires:       framework-gui%{?_isa} = %{evr}
 Requires:       framework-kcm%{?_isa} = %{evr}
-Requires:       framework-kcmd%{?_isa} = %{evr}
+Requires:       frameworkd%{?_isa} = %{evr}
 
 Packager:       Cypress Reed <cypress@fyralabs.com>
 
@@ -40,7 +40,7 @@ application, the KDE System Settings module, and the hardware service.
 
 %package -n framework-gui
 Summary:        Standalone Qt settings application for Framework laptops
-Requires:       framework-kcmd%{?_isa} = %{evr}
+Requires:       frameworkd%{?_isa} = %{evr}
 Requires:       hicolor-icon-theme
 Requires:       qt6-qtdeclarative
 
@@ -51,7 +51,7 @@ require KDE.
 
 %package -n framework-kcm
 Summary:        KDE System Settings module for Framework laptops
-Requires:       framework-kcmd%{?_isa} = %{evr}
+Requires:       frameworkd%{?_isa} = %{evr}
 Requires:       plasma-systemsettings
 Requires:       kf6-kcmutils
 Requires:       kf6-kirigami
@@ -62,13 +62,15 @@ Requires:       hicolor-icon-theme
 KDE System Settings module for configuring Framework laptop battery charging,
 fans, touchpad, LEDs, firmware information, and USB-C ports.
 
-%package -n framework-kcmd
+%package -n frameworkd
 Summary:        System service for Framework laptop hardware settings
+Provides:       framework-kcmd = %{version}-%{release}
+Obsoletes:      framework-kcmd <= %{version}-%{release}
 Requires:       dbus
 Requires:       polkit
 Requires:       systemd
 
-%description -n framework-kcmd
+%description -n frameworkd
 System service that provides privileged hardware access for the Framework
 laptop settings interfaces.
 
@@ -85,14 +87,33 @@ laptop settings interfaces.
 %cmake_install
 %find_lang kcm_framework
 
-%post -n framework-kcmd
-%systemd_post framework-kcmd.service
+%pre -n frameworkd
+# Up to 0.1.1 the daemon was called framework-kcmd. Its unit file is still
+# installed at this point, so disable it here (otherwise the enable symlink
+# is left dangling), remember whether it was enabled, and move its state.
+if [ -e %{_unitdir}/framework-kcmd.service ]; then
+    if systemctl is-enabled --quiet framework-kcmd.service 2>/dev/null; then
+        touch %{_rundir}/frameworkd-migrate-enable
+    fi
+    systemctl disable --now framework-kcmd.service >/dev/null 2>&1 || :
+    if [ -d %{_sharedstatedir}/framework-kcmd ] && [ ! -e %{_sharedstatedir}/frameworkd ]; then
+        mv %{_sharedstatedir}/framework-kcmd %{_sharedstatedir}/frameworkd
+    fi
+fi
 
-%preun -n framework-kcmd
-%systemd_preun framework-kcmd.service
+%post -n frameworkd
+%systemd_post frameworkd.service
+if [ -e %{_rundir}/frameworkd-migrate-enable ]; then
+    rm -f %{_rundir}/frameworkd-migrate-enable
+    systemctl daemon-reload >/dev/null 2>&1 || :
+    systemctl enable --now frameworkd.service >/dev/null 2>&1 || :
+fi
 
-%postun -n framework-kcmd
-%systemd_postun_with_restart framework-kcmd.service
+%preun -n frameworkd
+%systemd_preun frameworkd.service
+
+%postun -n frameworkd
+%systemd_postun_with_restart frameworkd.service
 
 %files
 %license LICENSE
@@ -110,12 +131,12 @@ laptop settings interfaces.
 %{_appsdir}/kcm_framework.desktop
 %{_datadir}/icons/hicolor/scalable/apps/framework-kcm.svg
 
-%files -n framework-kcmd
+%files -n frameworkd
 %license LICENSE
 %{_datadir}/dbus-1/system.d/io.github.frameworkkcm.Daemon1.conf
 %{_datadir}/dbus-1/system-services/io.github.frameworkkcm.Daemon1.service
-%{_unitdir}/framework-kcmd.service
-%{_libexecdir}/framework-kcmd
+%{_unitdir}/frameworkd.service
+%{_libexecdir}/frameworkd
 %{_datadir}/polkit-1/actions/io.github.frameworkkcm.policy
 
 %changelog

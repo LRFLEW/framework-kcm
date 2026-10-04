@@ -6,7 +6,7 @@ set(KF_MIN_VERSION "6.0.0")
 
 option(BUILD_KCM "Build the KDE System Settings module" ON)
 option(BUILD_GUI "Build the standalone Qt settings application" ON)
-option(BUILD_DAEMON "Build the framework-kcmd system service with cargo" ON)
+option(BUILD_DAEMON "Build the frameworkd system service with cargo" ON)
 option(INSTALL_PACKAGE_DOCS "Install the license and README through CMake" ON)
 
 if(BUILD_KCM)
@@ -42,36 +42,36 @@ if(BUILD_GUI)
 endif()
 qt_policy(SET QTP0001 NEW)
 
-set(DAEMON_PATH "${KDE_INSTALL_FULL_LIBEXECDIR}/framework-kcmd" CACHE FILEPATH "Path to the Daemon build to use if BUILD_DAEMON=OFF")
-if(BUILD_DAEMON AND NOT DAEMON_PATH STREQUAL "${KDE_INSTALL_FULL_LIBEXECDIR}/framework-kcmd")
+set(DAEMON_PATH "${KDE_INSTALL_FULL_LIBEXECDIR}/frameworkd" CACHE FILEPATH "Path to the Daemon build to use if BUILD_DAEMON=OFF")
+if(BUILD_DAEMON AND NOT DAEMON_PATH STREQUAL "${KDE_INSTALL_FULL_LIBEXECDIR}/frameworkd")
   message(FATAL_ERROR "Do not modify DAEMON_PATH if BUILD_DAEMON=ON")
 endif()
 
 if(BUILD_DAEMON)
   find_program(CARGO cargo REQUIRED)
   set(CARGO_TARGET_DIR "${CMAKE_BINARY_DIR}/cargo")
-  add_custom_target(framework-kcmd ALL
+  add_custom_target(frameworkd ALL
         COMMAND ${CARGO} build --release --locked
             --manifest-path "${CMAKE_SOURCE_DIR}/daemon/Cargo.toml"
             --target-dir "${CARGO_TARGET_DIR}"
         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/daemon"
         USES_TERMINAL
-        COMMENT "Building framework-kcmd with cargo")
-  install(PROGRAMS "${CARGO_TARGET_DIR}/release/framework-kcmd" DESTINATION ${KDE_INSTALL_LIBEXECDIR} COMPONENT kcmd)
+        COMMENT "Building frameworkd with cargo")
+  install(PROGRAMS "${CARGO_TARGET_DIR}/release/frameworkd" DESTINATION ${KDE_INSTALL_LIBEXECDIR} COMPONENT frameworkd)
 endif()
 
 configure_file(data/io.github.frameworkkcm.Daemon1.service.in
                ${CMAKE_CURRENT_BINARY_DIR}/io.github.frameworkkcm.Daemon1.service @ONLY)
-configure_file(data/framework-kcmd.service.in
-               ${CMAKE_CURRENT_BINARY_DIR}/framework-kcmd.service @ONLY)
+configure_file(data/frameworkd.service.in
+               ${CMAKE_CURRENT_BINARY_DIR}/frameworkd.service @ONLY)
 
 if(BUILD_KCM OR BUILD_DAEMON)
-  install(FILES data/io.github.frameworkkcm.Daemon1.conf DESTINATION ${KDE_INSTALL_DBUSDIR}/system.d COMPONENT kcmd)
+  install(FILES data/io.github.frameworkkcm.Daemon1.conf DESTINATION ${KDE_INSTALL_DBUSDIR}/system.d COMPONENT frameworkd)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/io.github.frameworkkcm.Daemon1.service
-            DESTINATION ${KDE_INSTALL_DBUSSYSTEMSERVICEDIR} COMPONENT kcmd)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/framework-kcmd.service
-            DESTINATION ${KDE_INSTALL_SYSTEMDUNITDIR}/system COMPONENT kcmd)
-  install(FILES data/io.github.frameworkkcm.policy DESTINATION ${KDE_INSTALL_DATADIR}/polkit-1/actions COMPONENT kcmd)
+          DESTINATION ${KDE_INSTALL_DBUSSYSTEMSERVICEDIR} COMPONENT frameworkd)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/frameworkd.service
+          DESTINATION ${KDE_INSTALL_SYSTEMDUNITDIR}/system COMPONENT frameworkd)
+  install(FILES data/io.github.frameworkkcm.policy DESTINATION ${KDE_INSTALL_DATADIR}/polkit-1/actions COMPONENT frameworkd)
 endif()
 if(BUILD_KCM)
   install(FILES data/icons/framework-kcm.svg

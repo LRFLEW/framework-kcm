@@ -2,7 +2,7 @@
 
 Framework settings is packaged with distro-native tools. Fedora, Arch, and
 Debian produce a `framework-settings` meta-package plus separate `framework-gui`,
-`framework-kcm`, and `framework-kcmd` packages. The GUI package has no KDE
+`framework-kcm`, and `frameworkd` packages. The GUI package has no KDE
 dependency; both interfaces depend on the service package for hardware access.
 
 ## Fedora RPMs
@@ -39,10 +39,10 @@ and license files. The CI workflow for the Git RPM is
 ## Arch Linux
 
 Arch packages are described by `packaging/arch/PKGBUILD`, with service
-install/removal messages in `packaging/arch/framework-kcmd.install`. The
+install/removal messages in `packaging/arch/frameworkd.install`. The
 `framework-settings` meta-package installs all three components. Install
-`framework-gui` and `framework-kcmd` directly for a non-KDE desktop, or
-`framework-kcm` and `framework-kcmd` for the System Settings module. The release
+`framework-gui` and `frameworkd` directly for a non-KDE desktop, or
+`framework-kcm` and `frameworkd` for the System Settings module. The release
 workflow creates a versioned source archive, stages these packaging files,
 sets the repository URL and version, and runs `makepkg`. The PKGBUILD expects
 that staged archive next to it, so it is not a direct `makepkg` invocation from
@@ -53,7 +53,7 @@ To apply write-only touchpad and charge-rate settings at boot, enable the
 service after installation:
 
 ```sh
-sudo systemctl enable --now framework-kcmd.service
+sudo systemctl enable --now frameworkd.service
 ```
 
 ## Debian and Ubuntu packages
@@ -81,7 +81,7 @@ cmake --build build --parallel
 ```
 
 CPack writes four `.deb` files into `build/`: the `framework-settings`
-meta-package and the `framework-gui`, `framework-kcm`, and `framework-kcmd`
+meta-package and the `framework-gui`, `framework-kcm`, and `frameworkd`
 components. Install all four local files together:
 
 ```sh

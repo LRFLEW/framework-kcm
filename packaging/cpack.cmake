@@ -21,11 +21,12 @@ if(BUILD_KCM)
   list(APPEND _framework_meta_dependencies "framework-kcm (= ${PROJECT_VERSION})")
 endif()
 if(BUILD_DAEMON)
-  list(APPEND CPACK_COMPONENTS_ALL kcmd)
-  list(APPEND _framework_meta_dependencies "framework-kcmd (= ${PROJECT_VERSION})")
+  list(APPEND CPACK_COMPONENTS_ALL frameworkd)
+  list(APPEND _framework_meta_dependencies "frameworkd (= ${PROJECT_VERSION})")
 endif()
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+
 set(CPACK_DEBIAN_PACKAGE_CONTROL_STRICT_PERMISSION ON)
 
 set(CPACK_DEBIAN_META_PACKAGE_NAME "framework-settings")
@@ -42,21 +43,24 @@ set(CPACK_DEBIAN_GUI_PACKAGE_SECTION "utils")
 set(CPACK_DEBIAN_GUI_DESCRIPTION
     "Standalone Qt application for managing Framework laptop charging, fans, touchpad, LED, and firmware settings.")
 set(CPACK_DEBIAN_GUI_PACKAGE_DEPENDS
-    "framework-kcmd, hicolor-icon-theme, qml6-module-qtquick-controls, qml6-module-qtquick-layouts")
+    "frameworkd, hicolor-icon-theme, qml6-module-qtquick-controls, qml6-module-qtquick-layouts")
 
 set(CPACK_DEBIAN_KCM_PACKAGE_NAME "framework-kcm")
 set(CPACK_DEBIAN_KCM_PACKAGE_SECTION "kde")
 set(CPACK_DEBIAN_KCM_DESCRIPTION
     "KDE System Settings module for Framework laptop charging, fans, touchpad, LED, and firmware settings.")
 set(CPACK_DEBIAN_KCM_PACKAGE_DEPENDS
-    "framework-kcmd, hicolor-icon-theme, systemsettings, qml6-module-org-kde-kcmutils, qml6-module-org-kde-kirigami, qml6-module-qtquick-controls, qml6-module-qtquick-layouts")
+    "frameworkd, hicolor-icon-theme, systemsettings, qml6-module-org-kde-kcmutils, qml6-module-org-kde-kirigami, qml6-module-qtquick-controls, qml6-module-qtquick-layouts")
 
-set(CPACK_DEBIAN_KCMD_PACKAGE_NAME "framework-kcmd")
-set(CPACK_DEBIAN_KCMD_PACKAGE_SECTION "admin")
-set(CPACK_DEBIAN_KCMD_DESCRIPTION
+set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_NAME "frameworkd")
+set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_SECTION "admin")
+set(CPACK_DEBIAN_FRAMEWORKD_DESCRIPTION
     "System service providing privileged hardware access for Framework laptop settings.")
-set(CPACK_DEBIAN_KCMD_PACKAGE_DEPENDS "dbus, polkitd, systemd")
-set(CPACK_DEBIAN_KCMD_PACKAGE_CONTROL_EXTRA
-    "${CMAKE_CURRENT_LIST_DIR}/debian/postinst;${CMAKE_CURRENT_LIST_DIR}/debian/prerm;${CMAKE_CURRENT_LIST_DIR}/debian/postrm")
+set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_DEPENDS "dbus, polkitd, systemd")
+set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_PROVIDES "framework-kcmd")
+set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_CONFLICTS "framework-kcmd")
+set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_REPLACES "framework-kcmd")
+set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_CONTROL_EXTRA
+    "${CMAKE_CURRENT_LIST_DIR}/debian/preinst;${CMAKE_CURRENT_LIST_DIR}/debian/postinst;${CMAKE_CURRENT_LIST_DIR}/debian/prerm;${CMAKE_CURRENT_LIST_DIR}/debian/postrm")
 
 include(CPack)

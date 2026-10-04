@@ -41,16 +41,34 @@ built with Qt Quick Controls and has no KDE runtime dependency.
 Download the package for your distribution from the
 [latest release](https://github.com/flamingspaz/framework-kcm/releases/latest).
 
+**Nix**
+
+Build from a checkout with:
+
+```sh
+nix build
+```
+
+The `framework-kcm` package includes the KCM and points its D-Bus and systemd
+service files at the daemon in the Nix store. Build the daemon by itself with:
+
+```sh
+nix build .#frameworkd
+```
+
+The underlying package expression is in `packaging/nix/package.nix`. The old
+`framework-kcmd` Nix attribute remains as a compatibility alias.
+
 **Arch Linux**
 
 ```sh
 sudo pacman -U framework-*.pkg.tar.zst
-sudo systemctl enable --now framework-kcmd
+sudo systemctl enable --now frameworkd
 ```
 
 The Arch `framework-settings` meta-package installs the GUI, KCM, and service.
 For a non-KDE desktop, install `framework-gui` instead; it brings in
-`framework-kcmd` without the KCM.
+`frameworkd` without the KCM.
 
 **Ubuntu 26.04**
 
@@ -78,14 +96,14 @@ Then open **System Settings → System → Framework Laptop**, or run
 `kcmshell6 kcm_framework`. On non-KDE desktops, launch **Framework Settings**
 or run `framework-settings`.
 
-The `framework-kcmd` service starts on its own when you open the settings
+The `frameworkd` service starts on its own when you open the settings
 page. Enabling it also starts it at boot, so settings the hardware forgets
 (touchpad feedback, click force, charge speed) are applied again after a
 restart.
 
 To uninstall the full suite, remove the `framework-settings` meta-package. If
 installed separately, remove the packages you chose (`framework-gui`,
-`framework-kcm`, and/or `framework-kcmd`). On Arch,
+`framework-kcm`, and/or `frameworkd`). On Arch,
 `sudo pacman -Rns framework-settings` also removes unneeded subpackages; on
 Debian-based systems, use `sudo apt remove framework-settings` and optionally
 `sudo apt autoremove`.
