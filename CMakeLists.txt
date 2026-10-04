@@ -81,6 +81,8 @@ if(BUILD_GUI)
   install(FILES data/icons/framework-kcm.svg
           DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor/scalable/apps
           RENAME framework-gui.svg COMPONENT gui)
+  install(FILES data/com.github.framework-settings.metainfo.xml
+          DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo COMPONENT gui)
 endif()
 
 if(INSTALL_PACKAGE_DOCS)
