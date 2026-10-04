@@ -69,7 +69,7 @@ ScrollView {
             Label {
                 Layout.fillWidth: true
                 text: qsTr("Create entries that automatically apply a charge limit on selected weekdays.")
-                color: palette.mid
+                color: palette.text
                 wrapMode: Text.Wrap
             }
         }
@@ -180,7 +180,7 @@ ScrollView {
             Layout.fillWidth: true
             visible: !kcm.fixtureMode
             text: qsTr("Schedules run through your user systemd manager and require framework_tool from framework-system.")
-            color: palette.mid
+            color: palette.text
             wrapMode: Text.Wrap
         }
     }

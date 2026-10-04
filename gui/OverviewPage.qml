@@ -80,7 +80,7 @@ ScrollView {
             Layout.fillWidth: true
             visible: kcm.fixtureMode
             wrapMode: Text.Wrap
-            color: palette.mid
+            color: palette.text
             text: qsTr("Fixture mode is active. Readings are simulated, changes stay in memory, and no hardware service is contacted.")
         }
 
@@ -116,7 +116,7 @@ ScrollView {
                               .arg(kcm.supportsTouchscreen ? qsTr("Yes") : qsTr("No"))
                               .arg(kcm.supportsTabletMode ? qsTr("Yes") : qsTr("No"))
                         wrapMode: Text.Wrap
-                        color: palette.mid
+                        color: palette.text
                     }
                 }
             }
@@ -156,14 +156,14 @@ ScrollView {
                         Layout.fillWidth: true
                         text: kcm.chargeLimit > 0 ? qsTr("Charge limit: %1%").arg(kcm.chargeLimit)
                                                   : qsTr("Charge limit unavailable")
-                        color: palette.mid
+                        color: palette.text
                         wrapMode: Text.Wrap
                     }
                     Label {
                         Layout.fillWidth: true
                         visible: root.nextScheduleSummary().length > 0
                         text: root.nextScheduleSummary()
-                        color: palette.mid
+                        color: palette.text
                         wrapMode: Text.Wrap
                     }
                 }
@@ -188,7 +188,7 @@ ScrollView {
                         text: kcm.fans.length > 0
                               ? kcm.fans.map(fan => qsTr("%1: %2 RPM").arg(fan.name || fan.position).arg(fan.rpm)).join(" · ")
                               : qsTr("Fan readings unavailable")
-                        color: palette.mid
+                        color: palette.text
                         wrapMode: Text.Wrap
                     }
                     Label {
@@ -211,11 +211,11 @@ ScrollView {
                     columns: 2
                     columnSpacing: 16
                     rowSpacing: 6
-                    Label { text: qsTr("Model"); color: palette.mid }
+                    Label { text: qsTr("Model"); color: palette.text }
                     Label { Layout.fillWidth: true; text: kcm.systemInfo.product || qsTr("Unknown"); wrapMode: Text.Wrap }
-                    Label { text: qsTr("BIOS"); color: palette.mid }
+                    Label { text: qsTr("BIOS"); color: palette.text }
                     Label { Layout.fillWidth: true; text: kcm.systemInfo.biosVersion || qsTr("Unknown"); wrapMode: Text.Wrap }
-                    Label { text: qsTr("EC"); color: palette.mid }
+                    Label { text: qsTr("EC"); color: palette.text }
                     Label { Layout.fillWidth: true; text: kcm.systemInfo.ecVersion || qsTr("Unknown"); wrapMode: Text.Wrap }
                 }
             }

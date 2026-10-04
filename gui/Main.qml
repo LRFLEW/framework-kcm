@@ -36,7 +36,7 @@ ApplicationWindow {
             }
             Label {
                 text: qsTr("Manage charging, cooling, and input hardware.")
-                color: palette.mid
+                color: palette.text
             }
         }
 
@@ -46,7 +46,7 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
-                color: "#b3261e"
+                color: palette.text
                 text: qsTr("Cannot connect to the Framework hardware service (frameworkd). It is normally started automatically by D-Bus. Check that it is installed and that D-Bus activation is available, then retry.")
             }
             Button {
@@ -59,7 +59,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             visible: kcm.errorMessage.length > 0
             wrapMode: Text.Wrap
-            color: "#b3261e"
+            color: palette.text
             text: kcm.errorMessage
         }
 
@@ -148,7 +148,7 @@ ApplicationWindow {
                                     text: kcm.powerInfo.acPresent === undefined
                                           ? qsTr("Power status unavailable")
                                           : kcm.powerInfo.acPresent ? qsTr("AC power connected") : qsTr("Running on battery")
-                                    color: palette.mid
+                                    color: palette.text
                                     wrapMode: Text.Wrap
                                 }
                                 Label {
@@ -357,7 +357,7 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 visible: kcm.fanMode !== "auto"
                                 wrapMode: Text.Wrap
-                                color: "#8a4b08"
+                                color: palette.text
                                 text: qsTr("A fixed fan speed can let the system run hot and throttle. Fans return to automatic when the service stops or the laptop reboots.")
                             }
                         }
@@ -439,31 +439,31 @@ ApplicationWindow {
                             columnSpacing: 24
                             rowSpacing: 12
                             Label {
-                                text: qsTr("Model"); color: palette.mid
+                                text: qsTr("Model"); color: palette.text
                             }
                             Label {
                                 Layout.fillWidth: true; text: kcm.systemInfo.product || qsTr("Unknown")
                             }
                             Label {
-                                text: qsTr("BIOS"); color: palette.mid
+                                text: qsTr("BIOS"); color: palette.text
                             }
                             Label {
                                 Layout.fillWidth: true; text: kcm.systemInfo.biosVersion || qsTr("Unknown")
                             }
                             Label {
-                                text: qsTr("EC"); color: palette.mid
+                                text: qsTr("EC"); color: palette.text
                             }
                             Label {
                                 Layout.fillWidth: true; text: kcm.systemInfo.ecVersion || qsTr("Unknown")
                             }
                             Label {
-                                text: qsTr("Service"); color: palette.mid
+                                text: qsTr("Service"); color: palette.text
                             }
                             Label {
                                 Layout.fillWidth: true; text: kcm.systemInfo.daemonVersion || qsTr("Unknown")
                             }
                             Label {
-                                text: qsTr("Camera"); color: palette.mid
+                                text: qsTr("Camera"); color: palette.text
                             }
                             Label {
                                 Layout.fillWidth: true
@@ -471,7 +471,7 @@ ApplicationWindow {
                                 text: kcm.systemInfo.privacyKnown ? (kcm.systemInfo.cameraEnabled ? qsTr("Enabled") : qsTr("Disabled by privacy switch")) : qsTr("Unknown")
                             }
                             Label {
-                                text: qsTr("Microphone"); color: palette.mid
+                                text: qsTr("Microphone"); color: palette.text
                             }
                             Label {
                                 Layout.fillWidth: true
@@ -524,7 +524,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             Label {
                 Layout.fillWidth: true
-                color: kcm.busy ? palette.mid : palette.text
+            color: palette.text
                 text: kcm.busy ? qsTr("Applying settings…") : kcm.needsSave ? qsTr("Changes not applied") : ""
             }
             Button {
