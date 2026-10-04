@@ -12,9 +12,14 @@ firmware and USB-C port information.
 
 ## Features
 
+- **Overview:** a read-only summary of battery, thermals, fans, and firmware,
+  with hardware controls kept on their dedicated tabs.
 - **Battery:** set a charge limit, charge to 100% once with _Override Charge
   Limit_ (the limit comes back after the next restart), and slow down
   charging to reduce heat and battery wear.
+- **Schedule:** apply different charge limits on selected weekdays and times
+  using user systemd timers. Scheduling requires `framework_tool` from
+  `framework-system`.
 - **Fans & Thermals:** live temperatures, fan speed and throttling status.
   Leave the fans on automatic, or fix their speed.
 - **Touchpad & LED:** fingerprint reader LED brightness, and haptic touchpad
@@ -109,6 +114,29 @@ installed separately, remove the packages you chose (`framework-gui`,
 `sudo pacman -Rns framework-settings` also removes unneeded subpackages; on
 Debian-based systems, use `sudo apt remove framework-settings` and optionally
 `sudo apt autoremove`.
+
+### Fixture mode
+
+To preview either UI without Framework hardware or the daemon, launch it with
+fixture mode enabled. Readings are simulated, setting changes stay in memory,
+and scheduling does not create systemd units:
+
+```sh
+FRAMEWORK_KCM_FIXTURE=1 kcmshell6 kcm_framework
+FRAMEWORK_KCM_FIXTURE=1 ./build-qt/gui/framework-settings
+```
+
+The Overview tab lets you choose a hardware profile for testing model-specific
+controls. You can also pick a profile at launch:
+
+```sh
+FRAMEWORK_KCM_FIXTURE=1 FRAMEWORK_KCM_FIXTURE_MODEL=framework-12 kcmshell6 kcm_framework
+FRAMEWORK_KCM_FIXTURE=1 FRAMEWORK_KCM_FIXTURE_MODEL=framework-12-gen2 kcmshell6 kcm_framework
+FRAMEWORK_KCM_FIXTURE=1 FRAMEWORK_KCM_FIXTURE_MODEL=framework-13 kcmshell6 kcm_framework
+FRAMEWORK_KCM_FIXTURE=1 FRAMEWORK_KCM_FIXTURE_MODEL=framework-13-pro kcmshell6 kcm_framework
+```
+
+The same `FRAMEWORK_KCM_FIXTURE_MODEL` values work with the standalone GUI.
 
 ## Permissions
 

@@ -42,7 +42,7 @@ ApplicationWindow {
 
         RowLayout {
             Layout.fillWidth: true
-            visible: !kcm.daemonAvailable
+            visible: !kcm.daemonAvailable && !kcm.fixtureMode
             Label {
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
@@ -67,25 +67,21 @@ ApplicationWindow {
             id: tabs
             Layout.fillWidth: true
             Layout.preferredWidth: parent.width
-            TabButton {
-                width: (window.width - 48) / 4; text: qsTr("Battery")
-            }
-            TabButton {
-                width: (window.width - 48) / 4; text: qsTr("Fans and Thermals")
-            }
-            TabButton {
-                width: (window.width - 48) / 4; text: qsTr("Touchpad and LED")
-            }
-            TabButton {
-                width: (window.width - 48) / 4; text: qsTr("System")
-            }
+            TabButton { width: (window.width - 48) / 6; text: qsTr("Overview") }
+            TabButton { width: (window.width - 48) / 6; text: qsTr("Battery") }
+            TabButton { width: (window.width - 48) / 6; text: qsTr("Schedule") }
+            TabButton { width: (window.width - 48) / 6; text: qsTr("Thermals") }
+            TabButton { width: (window.width - 48) / 6; text: qsTr("Input") }
+            TabButton { width: (window.width - 48) / 6; text: qsTr("System") }
         }
 
         StackLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             currentIndex: tabs.currentIndex
-            enabled: kcm.daemonAvailable && !kcm.busy
+            enabled: (kcm.daemonAvailable || kcm.fixtureMode) && !kcm.busy
+
+            OverviewPage { }
 
             ScrollView {
                 clip: true
@@ -94,6 +90,76 @@ ApplicationWindow {
                 ColumnLayout {
                     width: parent.width
                     spacing: 16
+                    GroupBox {
+                        Layout.fillWidth: true
+                        title: qsTr("Battery status")
+                        RowLayout {
+                            anchors.fill: parent
+                            Item {
+                                Layout.preferredWidth: 68
+                                Layout.preferredHeight: 112
+                                Rectangle {
+                                    id: batteryBody
+                                    anchors.centerIn: parent
+                                    width: 48
+                                    height: 96
+                                    radius: 5
+                                    color: palette.base
+                                    border.width: 2
+                                    border.color: palette.text
+                                    clip: true
+                                    Rectangle {
+                                        anchors.left: parent.left
+                                        anchors.right: parent.right
+                                        anchors.bottom: parent.bottom
+                                        anchors.margins: 3
+                                        height: (parent.height - 6) * Math.max(0, Math.min(100, kcm.powerInfo.percentage ?? 0)) / 100
+                                        color: (kcm.powerInfo.percentage ?? 100) <= 20 ? "#b3261e" : palette.highlight
+                                    }
+                                    Label {
+                                        anchors.centerIn: parent
+                                        text: kcm.powerInfo.batteryPresent && (kcm.powerInfo.percentage ?? -1) >= 0
+                                              ? qsTr("%1%").arg(kcm.powerInfo.percentage) : "--"
+                                        font.weight: Font.DemiBold
+                                    }
+                                }
+                                Rectangle {
+                                    anchors.horizontalCenter: batteryBody.horizontalCenter
+                                    anchors.bottom: batteryBody.top
+                                    width: 14
+                                    height: 5
+                                    color: palette.text
+                                }
+                            }
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: {
+                                        const power = kcm.powerInfo;
+                                        if (!power.batteryPresent) return qsTr("Battery unavailable");
+                                        if (power.charging) return qsTr("Charging");
+                                        if (power.discharging) return qsTr("Discharging");
+                                        return qsTr("Not charging");
+                                    }
+                                    font.weight: Font.DemiBold
+                                }
+                                Label {
+                                    Layout.fillWidth: true
+                                    text: kcm.powerInfo.acPresent === undefined
+                                          ? qsTr("Power status unavailable")
+                                          : kcm.powerInfo.acPresent ? qsTr("AC power connected") : qsTr("Running on battery")
+                                    color: palette.mid
+                                    wrapMode: Text.Wrap
+                                }
+                                Label {
+                                    Layout.fillWidth: true
+                                    text: kcm.chargeLimit > 0 ? qsTr("Charge limit: %1%").arg(kcm.chargeLimit)
+                                                              : qsTr("Charge limit unavailable")
+                                    wrapMode: Text.Wrap
+                                }
+                            }
+                        }
+                    }
                     GroupBox {
                         Layout.fillWidth: true
                         title: qsTr("Charging")
@@ -196,6 +262,8 @@ ApplicationWindow {
                     }
                 }
             }
+
+            SchedulePage { }
 
             ScrollView {
                 clip: true
@@ -476,7 +544,7 @@ ApplicationWindow {
     Binding {
         target: kcm
         property: "liveData"
-        value: tabs.currentIndex === 1 ? "thermal" : tabs.currentIndex === 3 ? "ports" : ""
+        value: tabs.currentIndex === 3 ? "thermal" : tabs.currentIndex === 5 ? "ports" : ""
     }
 
     Dialog {
