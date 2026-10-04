@@ -74,36 +74,52 @@ ScrollView {
 
     ColumnLayout {
         width: root.availableWidth
-        spacing: 16
-
-        ColumnLayout {
-            Layout.fillWidth: true
-            spacing: 2
-            Label {
-                text: qsTr("Overview")
-                font.pixelSize: 24
-                font.weight: Font.DemiBold
-            }
-            Label {
-                Layout.fillWidth: true
-                text: kcm.systemInfo.product || qsTr("Framework hardware overview")
-                color: palette.mid
-                wrapMode: Text.Wrap
-            }
-        }
+        spacing: 12
 
         Label {
             Layout.fillWidth: true
             visible: kcm.fixtureMode
             wrapMode: Text.Wrap
+            color: palette.mid
             text: qsTr("Fixture mode is active. Readings are simulated, changes stay in memory, and no hardware service is contacted.")
         }
 
-        GridLayout {
+        ColumnLayout {
             Layout.fillWidth: true
-            columns: width >= 680 ? 2 : 1
-            rowSpacing: 12
-            columnSpacing: 12
+            spacing: 12
+
+            GroupBox {
+                Layout.fillWidth: true
+                visible: kcm.fixtureMode
+                title: qsTr("Test hardware profile")
+                ColumnLayout {
+                    anchors.fill: parent
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Choose a profile to preview model-specific controls.")
+                        wrapMode: Text.Wrap
+                    }
+                    ComboBox {
+                        Layout.fillWidth: true
+                        textRole: "name"
+                        valueRole: "id"
+                        model: kcm.fixtureModels
+                        Component.onCompleted: currentIndex = indexOfValue(kcm.fixtureModel)
+                        onActivated: kcm.setFixtureModel(currentValue)
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTr("Keyboard backlight: %1 · Fingerprint LED: %2 · Input deck: %3 · Touchscreen: %4 · Tablet mode: %5")
+                              .arg(kcm.supportsKeyboardBacklight ? qsTr("Yes") : qsTr("No"))
+                              .arg(kcm.fpLedSupported ? qsTr("Yes") : qsTr("No"))
+                              .arg(kcm.supportsInputDeck ? qsTr("Yes") : qsTr("No"))
+                              .arg(kcm.supportsTouchscreen ? qsTr("Yes") : qsTr("No"))
+                              .arg(kcm.supportsTabletMode ? qsTr("Yes") : qsTr("No"))
+                        wrapMode: Text.Wrap
+                        color: palette.mid
+                    }
+                }
+            }
 
             GroupBox {
                 Layout.fillWidth: true
@@ -124,8 +140,23 @@ ScrollView {
                     Label {
                         Layout.fillWidth: true
                         text: kcm.powerInfo.batteryPresent && kcm.powerInfo.percentage >= 0
-                              ? qsTr("%1% · charge limit %2%").arg(kcm.powerInfo.percentage).arg(kcm.chargeLimit)
+                              ? qsTr("%1% · %2").arg(kcm.powerInfo.percentage)
+                                    .arg(kcm.powerInfo.acPresent ? qsTr("AC power connected") : qsTr("Running on battery"))
                               : qsTr("Battery readings unavailable")
+                        wrapMode: Text.Wrap
+                    }
+                    ProgressBar {
+                        Layout.fillWidth: true
+                        visible: kcm.powerInfo.batteryPresent && kcm.powerInfo.percentage >= 0
+                        from: 0
+                        to: 100
+                        value: kcm.powerInfo.percentage ?? 0
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        text: kcm.chargeLimit > 0 ? qsTr("Charge limit: %1%").arg(kcm.chargeLimit)
+                                                  : qsTr("Charge limit unavailable")
+                        color: palette.mid
                         wrapMode: Text.Wrap
                     }
                     Label {
@@ -186,39 +217,6 @@ ScrollView {
                     Label { Layout.fillWidth: true; text: kcm.systemInfo.biosVersion || qsTr("Unknown"); wrapMode: Text.Wrap }
                     Label { text: qsTr("EC"); color: palette.mid }
                     Label { Layout.fillWidth: true; text: kcm.systemInfo.ecVersion || qsTr("Unknown"); wrapMode: Text.Wrap }
-                }
-            }
-
-            GroupBox {
-                Layout.fillWidth: true
-                visible: kcm.fixtureMode
-                title: qsTr("Test hardware profile")
-                ColumnLayout {
-                    anchors.fill: parent
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Choose a profile to preview model-specific controls.")
-                        wrapMode: Text.Wrap
-                    }
-                    ComboBox {
-                        Layout.fillWidth: true
-                        textRole: "name"
-                        valueRole: "id"
-                        model: kcm.fixtureModels
-                        Component.onCompleted: currentIndex = indexOfValue(kcm.fixtureModel)
-                        onActivated: kcm.setFixtureModel(currentValue)
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTr("Keyboard backlight: %1 · Fingerprint LED: %2 · Input deck: %3 · Touchscreen: %4 · Tablet mode: %5")
-                              .arg(kcm.supportsKeyboardBacklight ? qsTr("Yes") : qsTr("No"))
-                              .arg(kcm.fpLedSupported ? qsTr("Yes") : qsTr("No"))
-                              .arg(kcm.supportsInputDeck ? qsTr("Yes") : qsTr("No"))
-                              .arg(kcm.supportsTouchscreen ? qsTr("Yes") : qsTr("No"))
-                              .arg(kcm.supportsTabletMode ? qsTr("Yes") : qsTr("No"))
-                        wrapMode: Text.Wrap
-                        color: palette.mid
-                    }
                 }
             }
         }
