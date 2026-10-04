@@ -35,6 +35,8 @@ tested.
 The System Settings module requires KDE Plasma 6. A separate desktop app,
 `framework-settings`, is also provided for other desktop environments; it is
 built with Qt Quick Controls and has no KDE runtime dependency.
+It follows Qt Quick Controls' configured style (including KDE's); on Linux
+with no style configured, Qt defaults to the desktop-oriented Fusion style.
 
 ## Install
 
@@ -140,10 +142,11 @@ for an administrator password.
 
 ## Languages
 
-The module follows your System Settings language. It's available in
-English, Dutch, German, Spanish and French. The non-English translations
-were machine-generated and haven't been reviewed by native speakers yet,
-so corrections are welcome. See [docs/translations.md](docs/translations.md).
+The KCM follows your System Settings language and is available in English,
+Dutch, German, Spanish and French. The standalone `framework-settings` app is
+English-only for now. The non-English KCM translations were machine-generated
+and haven't been reviewed by native speakers yet, so corrections are welcome.
+See [docs/translations.md](docs/translations.md).
 
 ## Documentation
 

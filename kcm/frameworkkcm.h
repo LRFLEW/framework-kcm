@@ -118,6 +118,7 @@ public:
     void setClickForce(const QString &value);
 
     Q_INVOKABLE void clearError();
+    Q_INVOKABLE void retryService();
     // Charge to 100% until the next boot; applied immediately, not on Apply
     Q_INVOKABLE void overrideChargeLimit();
     Q_INVOKABLE void cancelChargeLimitOverride();

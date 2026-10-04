@@ -5,13 +5,11 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QQuickStyle>
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
     QGuiApplication::setApplicationName(QStringLiteral("Framework Settings"));
     QGuiApplication::setOrganizationName(QStringLiteral("Framework"));
-    QQuickStyle::setStyle(QStringLiteral("Fusion"));
 
     FrameworkKcm settings;
     settings.load();
@@ -23,5 +21,5 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    return app.exec();
+    return QGuiApplication::exec();
 }

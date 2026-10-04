@@ -12,6 +12,14 @@ ApplicationWindow {
     minimumHeight: 560
     visible: true
     title: qsTr("Framework Settings")
+    property bool allowClose: false
+
+    onClosing: function (close) {
+        if (kcm.needsSave && !allowClose) {
+            close.accepted = false
+            discardDialog.open()
+        }
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -32,12 +40,20 @@ ApplicationWindow {
             }
         }
 
-        Label {
+        RowLayout {
             Layout.fillWidth: true
             visible: !kcm.daemonAvailable
-            wrapMode: Text.Wrap
-            color: "#b3261e"
-            text: qsTr("Cannot connect to the Framework hardware service (frameworkd). Make sure it is installed and running.")
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                color: "#b3261e"
+                text: qsTr("Cannot connect to the Framework hardware service (frameworkd). It is normally started automatically by D-Bus. Check that it is installed and that D-Bus activation is available, then retry.")
+            }
+            Button {
+                text: qsTr("Retry")
+                enabled: !kcm.busy
+                onClicked: kcm.retryService()
+            }
         }
         Label {
             Layout.fillWidth: true
@@ -51,10 +67,18 @@ ApplicationWindow {
             id: tabs
             Layout.fillWidth: true
             Layout.preferredWidth: parent.width
-            TabButton { width: (window.width - 48) / 4; text: qsTr("Battery") }
-            TabButton { width: (window.width - 48) / 4; text: qsTr("Fans and Thermals") }
-            TabButton { width: (window.width - 48) / 4; text: qsTr("Touchpad and LED") }
-            TabButton { width: (window.width - 48) / 4; text: qsTr("System") }
+            TabButton {
+                width: (window.width - 48) / 4; text: qsTr("Battery")
+            }
+            TabButton {
+                width: (window.width - 48) / 4; text: qsTr("Fans and Thermals")
+            }
+            TabButton {
+                width: (window.width - 48) / 4; text: qsTr("Touchpad and LED")
+            }
+            TabButton {
+                width: (window.width - 48) / 4; text: qsTr("System")
+            }
         }
 
         StackLayout {
@@ -76,15 +100,20 @@ ApplicationWindow {
                         ColumnLayout {
                             anchors.fill: parent
                             RowLayout {
-                                Label { Layout.fillWidth: true; text: qsTr("Charge limit") }
+                                Label {
+                                    Layout.fillWidth: true; text: qsTr("Charge limit")
+                                }
                                 Slider {
                                     id: chargeLimitSlider
                                     Layout.fillWidth: true
-                                    from: 25; to: 100; stepSize: 5; snapMode: Slider.SnapAlways
+                                    from: 25;
+                                    to: 100; stepSize: 5; snapMode: Slider.SnapAlways
                                     value: kcm.chargeLimit
                                     onMoved: kcm.chargeLimit = value
                                 }
-                                Label { text: qsTr("%1%").arg(chargeLimitSlider.value) }
+                                Label {
+                                    text: qsTr("%1%").arg(chargeLimitSlider.value)
+                                }
                             }
                             Label {
                                 Layout.fillWidth: true
@@ -125,15 +154,20 @@ ApplicationWindow {
                             }
                             RowLayout {
                                 visible: chargeSpeedCheck.checked
-                                Label { text: qsTr("Speed") }
+                                Label {
+                                    text: qsTr("Speed")
+                                }
                                 Slider {
                                     id: chargeRateSlider
                                     Layout.fillWidth: true
-                                    from: 0.1; to: 0.9; stepSize: 0.1; snapMode: Slider.SnapAlways
+                                    from: 0.1;
+                                    to: 0.9; stepSize: 0.1; snapMode: Slider.SnapAlways
                                     value: kcm.chargeRateLimit
                                     onMoved: kcm.chargeRateLimit = Math.round(value * 10) / 10
                                 }
-                                Label { text: qsTr("%1×").arg(Number(chargeRateSlider.value).toFixed(1)) }
+                                Label {
+                                    text: qsTr("%1×").arg(Number(chargeRateSlider.value).toFixed(1))
+                                }
                             }
                             RowLayout {
                                 visible: chargeSpeedCheck.checked
@@ -145,7 +179,8 @@ ApplicationWindow {
                                 }
                                 SpinBox {
                                     enabled: socCheck.checked
-                                    from: 0; to: 100; stepSize: 5
+                                    from: 0;
+                                    to: 100; stepSize: 5
                                     value: Math.max(0, kcm.chargeRateSoc)
                                     onValueModified: kcm.chargeRateSoc = value
                                     textFromValue: value => qsTr("%1%").arg(value)
@@ -179,8 +214,12 @@ ApplicationWindow {
                                 delegate: RowLayout {
                                     required property var modelData
                                     Layout.fillWidth: true
-                                    Label { Layout.fillWidth: true; text: modelData.name || modelData.location || qsTr("Sensor") }
-                                    Label { text: modelData.status === "ok" ? qsTr("%1 °C").arg(modelData.temp) : (modelData.status || qsTr("Error")) }
+                                    Label {
+                                        Layout.fillWidth: true; text: modelData.name || modelData.location || qsTr("Sensor")
+                                    }
+                                    Label {
+                                        text: modelData.status === "ok" ? qsTr("%1 °C").arg(modelData.temp) : (modelData.status || qsTr("Error"))
+                                    }
                                 }
                             }
                             Label {
@@ -207,7 +246,9 @@ ApplicationWindow {
                                 }
                             }
                             RowLayout {
-                                Label { Layout.fillWidth: true; text: qsTr("Fan control") }
+                                Label {
+                                    Layout.fillWidth: true; text: qsTr("Fan control")
+                                }
                                 ComboBox {
                                     model: [qsTr("Automatic"), qsTr("Fixed duty cycle"), qsTr("Fixed speed")]
                                     currentIndex: kcm.fanMode === "duty" ? 1 : kcm.fanMode === "rpm" ? 2 : 0
@@ -216,21 +257,29 @@ ApplicationWindow {
                             }
                             RowLayout {
                                 visible: kcm.fanMode === "duty"
-                                Label { Layout.fillWidth: true; text: qsTr("Fan duty") }
+                                Label {
+                                    Layout.fillWidth: true; text: qsTr("Fan duty")
+                                }
                                 Slider {
                                     id: dutySlider
                                     Layout.fillWidth: true
-                                    from: 0; to: 100; stepSize: 5; snapMode: Slider.SnapAlways
+                                    from: 0;
+                                    to: 100; stepSize: 5; snapMode: Slider.SnapAlways
                                     value: kcm.fanDuty
                                     onMoved: kcm.fanDuty = value
                                 }
-                                Label { text: qsTr("%1%").arg(dutySlider.value) }
+                                Label {
+                                    text: qsTr("%1%").arg(dutySlider.value)
+                                }
                             }
                             RowLayout {
                                 visible: kcm.fanMode === "rpm"
-                                Label { Layout.fillWidth: true; text: qsTr("Fan speed") }
+                                Label {
+                                    Layout.fillWidth: true; text: qsTr("Fan speed")
+                                }
                                 SpinBox {
-                                    from: 0; to: 8000; stepSize: 100
+                                    from: 0;
+                                    to: 8000; stepSize: 100
                                     value: kcm.fanRpm
                                     onValueModified: kcm.fanRpm = value
                                     textFromValue: value => qsTr("%1 RPM").arg(value)
@@ -260,7 +309,9 @@ ApplicationWindow {
                         title: qsTr("Fingerprint reader LED")
                         RowLayout {
                             anchors.fill: parent
-                            Label { Layout.fillWidth: true; text: qsTr("Brightness") }
+                            Label {
+                                Layout.fillWidth: true; text: qsTr("Brightness")
+                            }
                             ComboBox {
                                 enabled: kcm.fpLedSupported
                                 model: [qsTr("Automatic"), qsTr("High"), qsTr("Medium"), qsTr("Low"), qsTr("Ultra low")]
@@ -275,15 +326,19 @@ ApplicationWindow {
                         ColumnLayout {
                             anchors.fill: parent
                             RowLayout {
-                                Label { Layout.fillWidth: true; text: qsTr("Feedback intensity") }
+                                Label {
+                                    Layout.fillWidth: true; text: qsTr("Feedback intensity")
+                                }
                                 ComboBox {
                                     model: [qsTr("Not set"), qsTr("Off"), "25%", "50%", "75%", "100%"]
                                     currentIndex: kcm.hapticIntensity < 0 ? 0 : kcm.hapticIntensity === 0 ? 1 : Math.round(kcm.hapticIntensity / 25) + 1
-                                    onActivated: kcm.hapticIntensity = [ -1, 0, 25, 50, 75, 100 ][currentIndex]
+                                    onActivated: kcm.hapticIntensity = [-1, 0, 25, 50, 75, 100][currentIndex]
                                 }
                             }
                             RowLayout {
-                                Label { Layout.fillWidth: true; text: qsTr("Click force") }
+                                Label {
+                                    Layout.fillWidth: true; text: qsTr("Click force")
+                                }
                                 ComboBox {
                                     model: [qsTr("Not set"), qsTr("Light"), qsTr("Medium"), qsTr("Firm")]
                                     currentIndex: ["", "low", "medium", "high"].indexOf(kcm.clickForce)
@@ -315,21 +370,41 @@ ApplicationWindow {
                             columns: 2
                             columnSpacing: 24
                             rowSpacing: 12
-                            Label { text: qsTr("Model"); color: palette.mid }
-                            Label { Layout.fillWidth: true; text: kcm.systemInfo.product || qsTr("Unknown") }
-                            Label { text: qsTr("BIOS"); color: palette.mid }
-                            Label { Layout.fillWidth: true; text: kcm.systemInfo.biosVersion || qsTr("Unknown") }
-                            Label { text: qsTr("EC"); color: palette.mid }
-                            Label { Layout.fillWidth: true; text: kcm.systemInfo.ecVersion || qsTr("Unknown") }
-                            Label { text: qsTr("Service"); color: palette.mid }
-                            Label { Layout.fillWidth: true; text: kcm.systemInfo.daemonVersion || qsTr("Unknown") }
-                            Label { text: qsTr("Camera"); color: palette.mid }
+                            Label {
+                                text: qsTr("Model"); color: palette.mid
+                            }
+                            Label {
+                                Layout.fillWidth: true; text: kcm.systemInfo.product || qsTr("Unknown")
+                            }
+                            Label {
+                                text: qsTr("BIOS"); color: palette.mid
+                            }
+                            Label {
+                                Layout.fillWidth: true; text: kcm.systemInfo.biosVersion || qsTr("Unknown")
+                            }
+                            Label {
+                                text: qsTr("EC"); color: palette.mid
+                            }
+                            Label {
+                                Layout.fillWidth: true; text: kcm.systemInfo.ecVersion || qsTr("Unknown")
+                            }
+                            Label {
+                                text: qsTr("Service"); color: palette.mid
+                            }
+                            Label {
+                                Layout.fillWidth: true; text: kcm.systemInfo.daemonVersion || qsTr("Unknown")
+                            }
+                            Label {
+                                text: qsTr("Camera"); color: palette.mid
+                            }
                             Label {
                                 Layout.fillWidth: true
                                 wrapMode: Text.Wrap
                                 text: kcm.systemInfo.privacyKnown ? (kcm.systemInfo.cameraEnabled ? qsTr("Enabled") : qsTr("Disabled by privacy switch")) : qsTr("Unknown")
                             }
-                            Label { text: qsTr("Microphone"); color: palette.mid }
+                            Label {
+                                text: qsTr("Microphone"); color: palette.mid
+                            }
                             Label {
                                 Layout.fillWidth: true
                                 wrapMode: Text.Wrap
@@ -347,7 +422,9 @@ ApplicationWindow {
                                 delegate: RowLayout {
                                     required property var modelData
                                     Layout.fillWidth: true
-                                    Label { Layout.fillWidth: true; text: modelData.position || qsTr("Port") }
+                                    Label {
+                                        Layout.fillWidth: true; text: modelData.position || qsTr("Port")
+                                    }
                                     Label {
                                         Layout.fillWidth: true
                                         horizontalAlignment: Text.AlignRight
@@ -400,5 +477,38 @@ ApplicationWindow {
         target: kcm
         property: "liveData"
         value: tabs.currentIndex === 1 ? "thermal" : tabs.currentIndex === 3 ? "ports" : ""
+    }
+
+    Dialog {
+        id: discardDialog
+        anchors.centerIn: parent
+        modal: true
+        title: qsTr("Unsaved changes")
+
+        contentItem: Label {
+            text: kcm.busy
+                ? qsTr("Settings are being applied. Wait for the operation to finish before closing.")
+                : qsTr("You have changes that have not been applied. Discard them and close?")
+            wrapMode: Text.Wrap
+        }
+
+        footer: RowLayout {
+            Button {
+                text: qsTr("Cancel")
+                onClicked: discardDialog.close()
+            }
+            Item {
+                Layout.fillWidth: true
+            }
+            Button {
+                visible: !kcm.busy
+                text: qsTr("Discard and close")
+                onClicked: {
+                    window.allowClose = true
+                    discardDialog.close()
+                    window.close()
+                }
+            }
+        }
     }
 }

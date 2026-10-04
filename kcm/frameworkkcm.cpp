@@ -165,6 +165,19 @@ void FrameworkKcm::load() {
     refreshLive();
 }
 
+void FrameworkKcm::retryService() {
+    clearError();
+
+    // Retry reads without resetting the user's unsaved edits. Calling the
+    // service also lets D-Bus activation start frameworkd when it is stopped.
+    call(u"GetSystemInfo"_s, {}, [this](const QDBusMessage &reply) {
+        m_systemInfo = replyArg(reply, 0).toMap();
+        Q_EMIT systemInfoChanged();
+    });
+    loadSettings();
+    refreshLive();
+}
+
 // Take a value read from the daemon, keeping the user's unsaved edit if there is one
 template<typename T>
 void FrameworkKcm::syncSetting(T FrameworkSettings::*field, const T &value) {
