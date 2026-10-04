@@ -4,7 +4,7 @@
 # (see .github/workflows/build.yml). CI also fills in pkgver and url.
 
 pkgname=framework-kcm
-pkgver=0.1.1
+pkgver=0.1.2
 pkgrel=1
 pkgdesc='System Settings module for Framework laptops: charge limit, fans, touchpad, LEDs and firmware info'
 arch=('x86_64')
