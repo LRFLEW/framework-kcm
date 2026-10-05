@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "DBus daemon for framework configuration";
-    homepage = "https://github.com/flamingspaz/framework-kcm";
+    homepage = "https://github.com/flamingspaz/framework-settings";
     license = lib.licenses.gpl3Plus;
     mainProgram = "frameworkd";
     platforms = lib.platforms.linux;

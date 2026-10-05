@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Framework configuration in KDE settings";
-    homepage = "https://github.com/flamingspaz/framework-kcm";
+    homepage = "https://github.com/flamingspaz/framework-settings";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
