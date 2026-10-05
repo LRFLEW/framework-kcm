@@ -46,27 +46,63 @@ with no style configured, Qt defaults to the desktop-oriented Fusion style.
 ## Install
 
 Download the package for your distribution from the
-[latest release](https://github.com/flamingspaz/framework-kcm/releases/latest).
+[latest release](https://github.com/flamingspaz/framework-settings/releases/latest).
 
-**Nix**
+### NixOS (Flakes)
 
-Build from a checkout with:
+This project can be used by adding this repository as a flakes input
+and using the provided NixOS module. Below is a basic `flake.nix` example:
 
-```sh
-nix build
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    framework-settings = {
+      url = "github:flamingspaz/framework-settings/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+  outputs = { nixpkgs, framework-settings, ... }: {
+    nixosConfigurations = {
+      yourHost = nixpkgs.lib.nixosSystem {
+        modules = [
+          framework-settings.nixosModules.framework-kcm
+          { programs.framework-kcm.enable = true; }
+          ...
+        ];
+      };
+    };
+  };
+}
 ```
 
-The `framework-kcm` package includes the KCM and points its D-Bus and systemd
-service files at the daemon in the Nix store. Build the daemon by itself with:
+### NixOS (nix-channel)
 
-```sh
-nix build .#frameworkd
+For non-Flake configs, you can add this repository as a channel on your system.
+
+```bash
+$ sudo nix-channel --add https://github.com/flamingspaz/framework-settings/archive/main.tar.gz framework-settings
+$ sudo nix-channel --update
 ```
 
-The underlying package expression is in `packaging/nix/package.nix`. The old
-`framework-kcmd` Nix attribute remains as a compatibility alias.
+After adding the channel, you can add the following to your `configuration.nix`:
 
-**Arch Linux**
+```nix
+{ config, pkgs, ...}:
+let
+  framework-settings = import <framework-settings> { inherit pkgs; };
+in
+{
+  imports = [
+    ./hardware-configuration.nix
+    framework-settings.nixosModules.framework-kcm
+  ];
+  programs.framework-kcm.enable = true;
+  ...
+}
+```
+
+### Arch Linux
 
 ```sh
 sudo pacman -U framework-*.pkg.tar.zst
@@ -77,7 +113,7 @@ The Arch `framework-settings` meta-package installs the GUI, KCM, and service.
 For a non-KDE desktop, install `framework-gui` instead; it brings in
 `frameworkd` without the KCM.
 
-**Ubuntu 26.04**
+### Ubuntu 26.04
 
 ```sh
 sudo apt install ./framework-*.deb
@@ -88,7 +124,7 @@ service packages. From a repository, install `framework-gui` alone for a
 non-KDE setup; it pulls in the daemon but not the KCM. The daemon package
 configures and enables the background service.
 
-**Fedora**
+### Fedora
 
 The `framework-settings` meta-package is available in [Terra](https://terrapkg.com).
 
@@ -108,6 +144,7 @@ page. Enabling it also starts it at boot, so settings the hardware forgets
 (touchpad feedback, click force, charge speed) are applied again after a
 restart.
 
+<<<<<<< HEAD
 To uninstall the full suite, remove the `framework-settings` meta-package. If
 installed separately, remove the packages you chose (`framework-gui`,
 `framework-kcm`, and/or `frameworkd`). On Arch,
@@ -116,6 +153,12 @@ Debian-based systems, use `sudo apt remove framework-settings` and optionally
 `sudo apt autoremove`.
 
 ### Fixture mode
+
+=======
+
+## Fixture mode
+
+> > > > > > > main
 
 To preview either UI without Framework hardware or the daemon, launch it with
 fixture mode enabled. Readings are simulated, setting changes stay in memory,
