@@ -5,18 +5,15 @@
 
   outputs = { nixpkgs, ... }:
     let
-      systems = [ "x86_64-linux" "aarch64-linux" ];
-      forAllSystems = nixpkgs.lib.genAttrs systems;
+      forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ];
     in
     {
       packages = forAllSystems (system:
         let
           pkgs = import nixpkgs { inherit system; };
-          packageSet = import ./packaging/nix/package.nix { inherit pkgs; };
         in
-        {
-          default = packageSet.framework-kcm;
-          inherit (packageSet) framework-kcm frameworkd framework-kcmd;
-        });
+        import ./packaging/nix/packages { inherit pkgs; }
+      );
+      nixosModules = import ./packaging/nix/nixosModules;
     };
 }
