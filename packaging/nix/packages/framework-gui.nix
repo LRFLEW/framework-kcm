@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   buildInputs = with qt6; [
     qtbase
     qtdeclarative
-    qtquickcontrols2
+
   ];
 
   cmakeFlags = [
@@ -32,6 +32,12 @@ stdenv.mkDerivation {
     (lib.cmakeBool "BUILD_DAEMON" false)
     (lib.cmakeFeature "DAEMON_PATH" (lib.getExe frameworkd))
   ];
+
+  installPhase = ''
+    runHook preInstall
+    cmake --install . --component gui
+    runHook postInstall
+  '';
 
   meta = {
     description = "Standalone Qt settings application for Framework laptops";

@@ -32,10 +32,17 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_GUI" false)
     (lib.cmakeBool "BUILD_DAEMON" false)
     (lib.cmakeFeature "DAEMON_PATH" (lib.getExe frameworkd))
     (lib.cmakeBool "KDE_INSTALL_USE_QT_SYS_PATHS" true)
   ];
+
+  installPhase = ''
+    runHook preInstall
+    cmake --install . --component kcm
+    runHook postInstall
+  '';
 
   meta = {
     description = "Framework configuration in KDE settings";

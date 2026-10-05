@@ -82,6 +82,14 @@ the GUI, KCM, and daemon. It also exposes `framework-gui`, `framework-kcm`, and
 `frameworkd` individually under `packages.<system>`. The channel import below
 exposes the same package set under `framework-settings.packages`.
 
+For a non-KDE desktop, replace `nixosModules.framework-kcm` with
+`nixosModules.framework-gui` and enable `programs.framework-gui.enable` instead.
+Both modules enable `services.frameworkd`, which registers the daemon's D-Bus,
+PolicyKit, and systemd configuration and starts it at boot. Import both UI
+modules and enable both options to install both interfaces. Installing a
+package alone does not register the system service; use the NixOS modules for
+hardware access.
+
 ### NixOS (nix-channel)
 
 For non-Flake configs, you can add this repository as a channel on your system.
