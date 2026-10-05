@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        KDE System Settings module for Framework laptops (git)
 
 License:        GPL-3.0-or-later
-URL:            https://github.com/flamingspaz/framework-kcm
+URL:            https://github.com/flamingspaz/framework-settings
 Source0:        %{url}/archive/%{autogitcommit}.tar.gz
 
 BuildRequires:  cmake >= 3.22
