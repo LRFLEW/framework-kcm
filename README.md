@@ -42,34 +42,70 @@ Requires KDE Plasma 6.
 ## Install
 
 Download the package for your distribution from the
-[latest release](https://github.com/flamingspaz/framework-kcm/releases/latest).
+[latest release](https://github.com/flamingspaz/framework-settings/releases/latest).
 
-**Nix**
+### NixOS (Flakes)
 
-Build from a checkout with:
+This project can be used by adding this repository as a flakes input
+and using the provided NixOS module. Below is a basic `flake.nix` example:
 
-```sh
-nix build
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    framework-settings = {
+      url = "github:flamingspaz/framework-settings/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+  outputs = { nixpkgs, framework-settings, ... }: {
+    nixosConfigurations = {
+      yourHost = nixpkgs.lib.nixosSystem {
+        modules = [
+          framework-settings.nixosModules.framework-kcm
+          { programs.framework-kcm.enable = true; }
+          ...
+        ];
+      };
+    };
+  };
+}
 ```
 
-The `framework-kcm` package includes the KCM and points its D-Bus and systemd
-service files at the daemon in the Nix store. Build the daemon by itself with:
+### NixOS (nix-channel)
 
-```sh
-nix build .#frameworkd
+For non-Flake configs, you can add this repository as a channel on your system.
+
+```bash
+$ sudo nix-channel --add https://github.com/flamingspaz/framework-settings/archive/main.tar.gz framework-settings
+$ sudo nix-channel --update
 ```
 
-The underlying package expression is in `packaging/nix/package.nix`. The old
-`framework-kcmd` Nix attribute remains as a compatibility alias.
+After adding the channel, you can add the following to your `configuration.nix`:
 
-**Arch Linux**
+```nix
+{ config, pkgs, ...}:
+let
+  framework-settings = import <framework-settings> { inherit pkgs; };
+in
+{
+  imports = [
+    ./hardware-configuration.nix
+    framework-settings.nixosModules.framework-kcm
+  ];
+  programs.framework-kcm.enable = true;
+  ...
+}
+```
+
+### Arch Linux
 
 ```sh
 sudo pacman -U framework-kcm-*.pkg.tar.zst
 sudo systemctl enable --now frameworkd
 ```
 
-**Ubuntu 26.04**
+### Ubuntu 26.04
 
 ```sh
 sudo apt install ./framework-kcm_*.deb
@@ -77,7 +113,7 @@ sudo apt install ./framework-kcm_*.deb
 
 The Ubuntu package enables the background service for you.
 
-**Fedora**
+### Fedora
 
 `framework-kcm` is available in [Terra](https://terrapkg.com).
 
@@ -93,7 +129,7 @@ page. Enabling it also starts it at boot, so settings the hardware forgets
 (touchpad feedback, click force, charge speed) are applied again after a
 restart.
 
-### Fixture mode
+## Fixture mode
 
 To preview the pages without Framework hardware or the daemon, launch the KCM
 with fixture mode enabled. All readings are simulated, setting changes stay in
