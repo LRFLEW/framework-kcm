@@ -73,7 +73,7 @@ System service that provides privileged hardware access for the Framework
 laptop settings interfaces.
 
 %prep
-%autosetup -n framework-kcm-%{version}
+%autosetup -n framework-settings-%{version}
 
 %conf
 %cmake_kf6 -DINSTALL_PACKAGE_DOCS=OFF
