@@ -43,7 +43,7 @@ provides battery, fan, touchpad, LED, firmware and USB-C port controls, with
 a companion system service for hardware access.
 
 %prep
-%autosetup -n framework-kcm-%{autogitcommit}
+%autosetup -n framework-settings-%{autogitcommit}
 
 %conf
 %cmake_kf6
