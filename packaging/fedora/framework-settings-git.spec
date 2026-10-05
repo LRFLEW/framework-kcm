@@ -154,5 +154,11 @@ fi
 %{_datadir}/polkit-1/actions/io.github.frameworkkcm.policy
 
 %changelog
+* Mon Oct 05 2026 Cypress Reed <cypress@fyralabs.com>
+- handle desktop GUI split
+
+* Sun Oct 04 2026 Cypress Reed <cypress@fyralabs.com>
+- handle frameworkd rename
+
 * Fri Oct 02 2026 Cypress Reed <cypress@fyralabs.com>
-- Split GUI, KCM, and hardware service into independent subpackages
+- Initial package
