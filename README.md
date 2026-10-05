@@ -65,16 +65,22 @@ and using the provided NixOS module. Below is a basic `flake.nix` example:
   outputs = { nixpkgs, framework-settings, ... }: {
     nixosConfigurations = {
       yourHost = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
         modules = [
+          ./hardware-configuration.nix
           framework-settings.nixosModules.framework-kcm
           { programs.framework-kcm.enable = true; }
-          ...
         ];
       };
     };
   };
 }
 ```
+
+The flake exports `framework-settings` as its default package, which includes
+the GUI, KCM, and daemon. It also exposes `framework-gui`, `framework-kcm`, and
+`frameworkd` individually under `packages.<system>`. The channel import below
+exposes the same package set under `framework-settings.packages`.
 
 ### NixOS (nix-channel)
 
@@ -98,7 +104,7 @@ in
     framework-settings.nixosModules.framework-kcm
   ];
   programs.framework-kcm.enable = true;
-  ...
+  # Keep any other existing system configuration here.
 }
 ```
 
@@ -144,7 +150,6 @@ page. Enabling it also starts it at boot, so settings the hardware forgets
 (touchpad feedback, click force, charge speed) are applied again after a
 restart.
 
-<<<<<<< HEAD
 To uninstall the full suite, remove the `framework-settings` meta-package. If
 installed separately, remove the packages you chose (`framework-gui`,
 `framework-kcm`, and/or `frameworkd`). On Arch,
@@ -152,13 +157,7 @@ installed separately, remove the packages you chose (`framework-gui`,
 Debian-based systems, use `sudo apt remove framework-settings` and optionally
 `sudo apt autoremove`.
 
-### Fixture mode
-
-=======
-
 ## Fixture mode
-
-> > > > > > > main
 
 To preview either UI without Framework hardware or the daemon, launch it with
 fixture mode enabled. Readings are simulated, setting changes stay in memory,
