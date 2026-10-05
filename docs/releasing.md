@@ -9,7 +9,7 @@ request. It also warns if `po/` is out of date with the source.
 
 ## Cutting a release
 
-1. Bump the version in `CMakeLists.txt` (`project(framework-kcm VERSION ...)`), `daemon/Cargo.toml`, and `packaging/fedora/framework-kcm.spec` then commit.
+1. Run `scripts/release.sh <version>` (for example, `scripts/release.sh 0.2.0`) to update the project and packaging versions and refresh `daemon/Cargo.lock`; review the changes and commit.
 2. Tag the commit and push the tag:
 
    ```sh
