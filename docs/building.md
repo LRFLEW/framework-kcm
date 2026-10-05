@@ -36,12 +36,12 @@ sudo pacman -S --needed cmake extra-cmake-modules gcc rust git \
 From the repository root, run the Git RPM build with Anda:
 
 ```sh
-anda build -c terra-44-x86_64 kcm-git
+anda build -c terra-44-x86_64 framework-settings-git
 ```
 
-The `kcm-git` project in `anda.hcl` uses
-`packaging/fedora/framework-kcm-git.spec` and packages the current Git source.
-For the versioned RPM spec, use `anda build -c terra-44-x86_64 kcm`; that spec
+The `framework-settings-git` project in `anda.hcl` uses
+`packaging/fedora/framework-settings-git.spec` and packages the current Git source.
+For the versioned RPM spec, use `anda build -c terra-44-x86_64 framework-settings`; that spec
 builds the tagged source matching its `Version`. See
 [Packaging](packaging.md) for the distro packaging overview.
 

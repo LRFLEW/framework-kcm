@@ -17,14 +17,14 @@ You'll also need Terra's mock configs, which you can get by installing `terra-mo
 Then, run this command from the repository root:
 
 ```sh
-anda build -c terra-44-x86_64 kcm-git
+anda build -c terra-44-x86_64 framework-settings-git
 ```
 
 This builds the Git package from the current source revision using
 `framework-kcm-git.spec`. To build the versioned package from its release tag, run:
 
 ```sh
-anda build -c terra-44-x86_64 kcm
+anda build -c terra-44-x86_64 framework-settings
 ```
 
 The versioned spec uses the `v%{version}` source archive. Both specs produce

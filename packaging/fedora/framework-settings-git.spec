@@ -1,3 +1,4 @@
+%global appid com.github.framework-settings
 %global _version 0.1.2
 
 Name:           framework-settings
@@ -27,10 +28,13 @@ BuildRequires:  libusb1-devel
 BuildRequires:  systemd-devel
 BuildRequires:  libudev-devel
 BuildRequires:  systemd-rpm-macros
+BuildRequires:  terra-appstream-helper
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  anda-srpm-macros
 
-Requires:       framework-gui%{?_isa} = %{evr}
-Requires:       framework-kcm%{?_isa} = %{evr}
-Requires:       frameworkd%{?_isa} = %{evr}
+Suggests:       framework-gui%{?_isa} = %{evr}
+Suggests:       framework-kcm%{?_isa} = %{evr}
+Recommends:     frameworkd%{?_isa} = %{evr}
 
 Packager:       Cypress Reed <cypress@fyralabs.com>
 
@@ -40,6 +44,7 @@ application, the KDE System Settings module, and the hardware service.
 
 %package -n framework-gui
 Summary:        Standalone Qt settings application for Framework laptops
+Requires:       framework-settings%{?_isa} = %{evr}
 Requires:       frameworkd%{?_isa} = %{evr}
 Requires:       hicolor-icon-theme
 Requires:       qt6-qtdeclarative
@@ -51,6 +56,7 @@ require KDE.
 
 %package -n framework-kcm
 Summary:        KDE System Settings module for Framework laptops
+Requires:       framework-settings%{?_isa} = %{evr}
 Requires:       frameworkd%{?_isa} = %{evr}
 Requires:       plasma-systemsettings
 Requires:       kf6-kcmutils
@@ -64,11 +70,14 @@ fans, touchpad, LEDs, firmware information, and USB-C ports.
 
 %package -n frameworkd
 Summary:        System service for Framework laptop hardware settings
-Provides:       framework-kcmd = %{version}-%{release}
-Obsoletes:      framework-kcmd <= %{version}-%{release}
+Requires:       framework-settings%{?_isa} = %{evr}
+Provides:       framework-kcmd = %{evr}
+Obsoletes:      framework-kcmd <= %{evr}
 Requires:       dbus
 Requires:       polkit
 Requires:       systemd
+SourceLicense:  GPL-3.0-or-later
+License:        %{sourcelicense} AND (Apache-2.0 OR MIT) AND MIT AND ((MIT OR Apache-2.0) AND Unicode-3.0) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND GPL-3.0-or-later AND MPL-2.0 AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND BSD-3-Clause AND (MIT OR Apache-2.0 OR LGPL-2.1-or-later) AND (Unlicense OR MIT)
 
 %description -n frameworkd
 System service that provides privileged hardware access for the Framework
@@ -82,10 +91,16 @@ laptop settings interfaces.
 
 %build
 %cmake_build
+cd daemon
+%{cargo_license_summary_online}
+%{cargo_license_online} > ../LICENSE.dependencies
+cd ..
 
 %install
 %cmake_install
 %find_lang kcm_framework
+
+%terra_appstream
 
 %pre -n frameworkd
 # Up to 0.1.1 the daemon was called framework-kcmd. Its unit file is still
@@ -117,22 +132,21 @@ fi
 
 %files
 %license LICENSE
-%doc README.md
+%doc README.md docs/*.md
 
 %files -n framework-gui
-%license LICENSE
 %{_bindir}/framework-settings
 %{_appsdir}/io.github.frameworkkcm.desktop
-%{_datadir}/icons/hicolor/scalable/apps/framework-gui.svg
+%{_scalableiconsdir}/framework-gui.svg
+%{_metainfodir}/%{appid}.metainfo.xml
 
 %files -n framework-kcm -f kcm_framework.lang
-%license LICENSE
 %{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_framework.so
 %{_appsdir}/kcm_framework.desktop
-%{_datadir}/icons/hicolor/scalable/apps/framework-kcm.svg
+%{_scalableiconsdir}/framework-kcm.svg
 
 %files -n frameworkd
-%license LICENSE
+%license LICENSE.dependencies
 %{_datadir}/dbus-1/system.d/io.github.frameworkkcm.Daemon1.conf
 %{_datadir}/dbus-1/system-services/io.github.frameworkkcm.Daemon1.service
 %{_unitdir}/frameworkd.service

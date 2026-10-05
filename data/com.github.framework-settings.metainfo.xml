@@ -17,10 +17,8 @@
   </description>
 
   <launchable type="desktop-id">io.github.frameworkkcm.desktop</launchable>
-  <url type="homepage">https://github.com/flamingspaz/framework-kcm</url>
-  <url
-        type="bugtracker"
-    >https://github.com/flamingspaz/framework-kcm/issues</url>
+  <url type="homepage">https://github.com/flamingspaz/framework-settings</url>
+  <url type="bugtracker">https://github.com/flamingspaz/framework-settings/issues</url>
   <content_rating type="oars-1.1" />
   <categories>
     <category>Settings</category>
