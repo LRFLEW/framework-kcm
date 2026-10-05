@@ -1,6 +1,6 @@
 {
   lib,
-  stdenvNoCC,
+  symlinkJoin,
 
   version,
   framework-gui,
@@ -8,21 +8,10 @@
   frameworkd,
 }:
 
-stdenvNoCC.mkDerivation {
-  pname = "framework-settings";
-  inherit version;
+symlinkJoin {
+  name = "framework-settings-${version}";
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
-  dontUnpack = true;
-  dontBuild = true;
-
-  installPhase = ''
-    mkdir -p "$out"
-  '';
-
-  propagatedBuildInputs = [
+  paths = [
     framework-gui
     framework-kcm
     frameworkd

@@ -142,6 +142,7 @@ jobs:
           # Leave out the -debug split package
           path: |
             /tmp/pkg/framework-*.pkg.tar.zst
+            /tmp/pkg/frameworkd-*.pkg.tar.zst
             !/tmp/pkg/*-debug-*.pkg.tar.zst
           if-no-files-found: error
 

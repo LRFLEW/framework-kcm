@@ -2,6 +2,9 @@
 # shared documentation and depends on the functional packages built here.
 set(CPACK_PACKAGE_NAME "framework-settings")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+# The monolithic v0.1.2 package had no Debian revision. Revision 1 marks
+# the first split packages, allowing upgrades without breaking the new KCM.
+set(CPACK_DEBIAN_PACKAGE_RELEASE 1)
 set(CPACK_PACKAGE_CONTACT "Yousef <github-viral8565@pxdmail.com>")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Framework laptop hardware settings")
 set(CPACK_PACKAGE_DESCRIPTION "Qt and KDE settings interfaces for Framework laptops and the system service that applies hardware settings.")
@@ -14,15 +17,15 @@ set(CPACK_COMPONENTS_ALL meta)
 set(_framework_meta_dependencies)
 if(BUILD_GUI)
   list(APPEND CPACK_COMPONENTS_ALL gui)
-  list(APPEND _framework_meta_dependencies "framework-gui (= ${PROJECT_VERSION})")
+  list(APPEND _framework_meta_dependencies "framework-gui (= ${PROJECT_VERSION}-${CPACK_DEBIAN_PACKAGE_RELEASE})")
 endif()
 if(BUILD_KCM)
   list(APPEND CPACK_COMPONENTS_ALL kcm)
-  list(APPEND _framework_meta_dependencies "framework-kcm (= ${PROJECT_VERSION})")
+  list(APPEND _framework_meta_dependencies "framework-kcm (= ${PROJECT_VERSION}-${CPACK_DEBIAN_PACKAGE_RELEASE})")
 endif()
 if(BUILD_DAEMON)
   list(APPEND CPACK_COMPONENTS_ALL frameworkd)
-  list(APPEND _framework_meta_dependencies "frameworkd (= ${PROJECT_VERSION})")
+  list(APPEND _framework_meta_dependencies "frameworkd (= ${PROJECT_VERSION}-${CPACK_DEBIAN_PACKAGE_RELEASE})")
 endif()
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
@@ -59,7 +62,8 @@ set(CPACK_DEBIAN_FRAMEWORKD_DESCRIPTION
 set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_DEPENDS "dbus, polkitd, systemd")
 set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_PROVIDES "framework-kcmd")
 set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_CONFLICTS "framework-kcmd")
-set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_REPLACES "framework-kcmd")
+set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_BREAKS "framework-kcm (<< 0.1.2-1)")
+set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_REPLACES "framework-kcmd, framework-kcm (<< 0.1.2-1)")
 set(CPACK_DEBIAN_FRAMEWORKD_PACKAGE_CONTROL_EXTRA
     "${CMAKE_CURRENT_LIST_DIR}/debian/preinst;${CMAKE_CURRENT_LIST_DIR}/debian/postinst;${CMAKE_CURRENT_LIST_DIR}/debian/prerm;${CMAKE_CURRENT_LIST_DIR}/debian/postrm")
 

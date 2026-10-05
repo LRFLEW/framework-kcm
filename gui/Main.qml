@@ -67,12 +67,12 @@ ApplicationWindow {
             id: tabs
             Layout.fillWidth: true
             Layout.preferredWidth: parent.width
-            TabButton { width: (window.width - 48) / 6; text: qsTr("Overview") }
-            TabButton { width: (window.width - 48) / 6; text: qsTr("Battery") }
-            TabButton { width: (window.width - 48) / 6; text: qsTr("Schedule") }
-            TabButton { width: (window.width - 48) / 6; text: qsTr("Thermals") }
-            TabButton { width: (window.width - 48) / 6; text: qsTr("Input") }
-            TabButton { width: (window.width - 48) / 6; text: qsTr("System") }
+            SettingsTabButton { width: (window.width - 48) / 6; text: qsTr("Overview") }
+            SettingsTabButton { width: (window.width - 48) / 6; text: qsTr("Battery") }
+            SettingsTabButton { width: (window.width - 48) / 6; text: qsTr("Schedule") }
+            SettingsTabButton { width: (window.width - 48) / 6; text: qsTr("Thermals") }
+            SettingsTabButton { width: (window.width - 48) / 6; text: qsTr("Input") }
+            SettingsTabButton { width: (window.width - 48) / 6; text: qsTr("System") }
         }
 
         StackLayout {
@@ -544,7 +544,7 @@ ApplicationWindow {
     Binding {
         target: kcm
         property: "liveData"
-        value: tabs.currentIndex === 3 ? "thermal" : tabs.currentIndex === 5 ? "ports" : ""
+        value: tabs.currentIndex === 0 || tabs.currentIndex === 3 ? "thermal" : tabs.currentIndex === 5 ? "ports" : ""
     }
 
     Dialog {

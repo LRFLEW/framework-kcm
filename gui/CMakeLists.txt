@@ -21,6 +21,7 @@ qt_add_qml_module(framework-settings
         Main.qml
         OverviewPage.qml
         SchedulePage.qml
+        SettingsTabButton.qml
 )
 
 install(TARGETS framework-settings DESTINATION ${KDE_INSTALL_BINDIR} COMPONENT gui)
